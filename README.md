@@ -104,4 +104,4 @@ fix    Correção de erro    fix: corrige validação de email
 refactor    Alteração no código sem mudar funcionalidade    refactor: reorganiza service de usuários
 chore
 Configurações, dependências ou tarefas auxiliares
-chore: atualiza dependências do projeto
+chore: atualiza dependências do projeto.

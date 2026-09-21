@@ -9,6 +9,6 @@ export class CreateUserDTO {
     email: string = '';
 
     @IsNotEmpty()
-    passwordHash: string = '';
+    password: string = '';
 
 }
