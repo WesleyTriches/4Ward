@@ -8,34 +8,72 @@ datasource db {
   provider = "sqlite"
 }
 
+
+// ==================== ENUMS ====================
+
+enum UserRole {
+  PATIENT
+  PHYSIOTHERAPIST
+}
+
+enum ServiceMode {
+  IN_PERSON
+  ONLINE
+  BOTH
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum CancellationActor {
+  PATIENT
+  PHYSIOTHERAPIST
+}
+
+
+// ==================== USER ====================
+
 model User {
   id           Int      @id @default(autoincrement())
   name         String
   email        String   @unique
+  passwordHash String
+  role         UserRole @default(PATIENT)
+  active       Boolean  @default(true)
   createdAt    DateTime @default(now())
-  passwordHash String   @default("$2b$10$21V92Zk9GwSDXAdgqRr/oul1AN7/roDDo.q/eqCW35OdH1wUQDg9O")
-
-  role   String  @default("PATIENT")
-  active Boolean @default(true)
 
   profile Profile?
 }
 
+
+// ==================== PROFILE ====================
+
 model Profile {
   id        Int       @id @default(autoincrement())
   userId    Int       @unique
-  fullName  String
+  name      String
   phone     String?
   birthDate DateTime?
-  avatarUrl String?
+  photoUrl  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
 
   physiotherapist Physiotherapist?
   appointments    Appointment[]
 }
+
+
+// ==================== SPECIALTY ====================
 
 model Specialty {
   id          Int     @id @default(autoincrement())
@@ -46,24 +84,38 @@ model Specialty {
   physiotherapists Physiotherapist[]
 }
 
+
+// ==================== PHYSIOTHERAPIST ====================
+
 model Physiotherapist {
-  id              Int     @id @default(autoincrement())
-  profileId       Int     @unique
+  id              Int         @id @default(autoincrement())
+  profileId       Int         @unique
   specialtyId     Int
-  crefito         String  @unique
+  crefito         String      @unique
   bio             String?
   sessionPrice    Float
   city            String
-  serviceMode     String
+  serviceMode     ServiceMode
   experienceYears Int
   rating          Float?
 
-  profile   Profile   @relation(fields: [profileId], references: [id])
-  specialty Specialty @relation(fields: [specialtyId], references: [id])
+  profile Profile @relation(
+    fields: [profileId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  specialty Specialty @relation(
+    fields: [specialtyId],
+    references: [id]
+  )
 
   schedules    Schedule[]
   appointments Appointment[]
 }
+
+
+// ==================== SCHEDULE ====================
 
 model Schedule {
   id                Int      @id @default(autoincrement())
@@ -71,33 +123,67 @@ model Schedule {
   dateTime          DateTime
   available         Boolean  @default(true)
 
-  physiotherapist Physiotherapist @relation(fields: [physiotherapistId], references: [id])
-  appointment     Appointment?
+  physiotherapist Physiotherapist @relation(
+    fields: [physiotherapistId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  appointment Appointment?
 
   @@unique([physiotherapistId, dateTime])
 }
 
+
+// ==================== APPOINTMENT ====================
+
 model Appointment {
-  id                Int      @id @default(autoincrement())
+  id                Int               @id @default(autoincrement())
   patientId         Int
   physiotherapistId Int
-  scheduleId        Int      @unique
-  status            String
-  reason            String?
-  price             Float
-  painLevel         Int?
-  sessionNotes      String?
-  rescheduledFrom   Int?
-  cancelledBy       String?
-  cancelReason      String?
-  createdAt         DateTime @default(now())
+  scheduleId        Int               @unique
+  status            AppointmentStatus @default(SCHEDULED)
 
-  patient         Profile         @relation(fields: [patientId], references: [id])
-  physiotherapist Physiotherapist @relation(fields: [physiotherapistId], references: [id])
-  schedule        Schedule        @relation(fields: [scheduleId], references: [id])
+  reason       String?
+  price        Float
+  painLevel    Int?
+  sessionNotes String?
+
+  cancelledBy  CancellationActor?
+  cancelReason String?
+
+  rescheduledFromId Int? @unique
+
+  createdAt DateTime @default(now())
+
+  patient Profile @relation(
+    fields: [patientId],
+    references: [id]
+  )
+
+  physiotherapist Physiotherapist @relation(
+    fields: [physiotherapistId],
+    references: [id]
+  )
+
+  schedule Schedule @relation(
+    fields: [scheduleId],
+    references: [id]
+  )
+
+  rescheduledFrom Appointment? @relation(
+    "AppointmentReschedule",
+    fields: [rescheduledFromId],
+    references: [id]
+  )
+
+  rescheduledTo Appointment? @relation("AppointmentReschedule")
 
   review Review?
 }
+
+
+// ==================== REVIEW ====================
 
 model Review {
   id            Int      @id @default(autoincrement())
@@ -106,5 +192,9 @@ model Review {
   comment       String?
   createdAt     DateTime @default(now())
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  appointment Appointment @relation(
+    fields: [appointmentId],
+    references: [id],
+    onDelete: Cascade
+  )
 }
