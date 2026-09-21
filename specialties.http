@@ -1,0 +1,12 @@
+POST /api/specialties
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc4OTk1MDQ1MSwiZXhwIjoxNzkwMDM2ODUxfQ.sRZQ9cWfEFap2-e00D2w70znX6baXylV2Txej6KZQ_w
+Content-Type: application/json
+
+{
+  "name": "Fisioterapia Esportiva",
+  "description": "Tratamento de lesões relacionadas ao esporte",
+  "icon": "sports"
+}
+
+GET /api/specialties
+Authorization: Bearer SEU_TOKEN

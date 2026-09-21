@@ -1,8 +1,9 @@
 POST http://localhost:3000/api/profiles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc4OTk1MDQ1MSwiZXhwIjoxNzkwMDM2ODUxfQ.sRZQ9cWfEFap2-e00D2w70znX6baXylV2Txej6KZQ_w
 
 {
-"userId": 2,
+"userId": 1,
 "fullName": "Profile do Joaozinho",
 "birthDate": "1990-01-15T00:00:00Z",
 "avatarUrl": "pudim.com"
@@ -10,6 +11,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/profiles/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc4OTk1MDQ1MSwiZXhwIjoxNzkwMDM2ODUxfQ.sRZQ9cWfEFap2-e00D2w70znX6baXylV2Txej6KZQ_w
 
 ###
 PUT http://localhost:3000/api/profiles/1
