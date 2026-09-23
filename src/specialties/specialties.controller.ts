@@ -11,10 +11,11 @@ import {
 
 import { SpecialtiesService } from './specialties.service';
 import { CreateSpecialtyDto } from 'src/dtos/create-specialty-dto';
+import { UpdateSpecialtyDto } from 'src/dtos/update-specialty-dto';
 
 @Controller('specialties')
 export class SpecialtiesController {
-  constructor(private specialtiesService: SpecialtiesService) {}
+  constructor(private specialtiesService: SpecialtiesService) { }
 
   @Post()
   async create(@Body() dto: CreateSpecialtyDto) {
@@ -34,8 +35,8 @@ export class SpecialtiesController {
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: CreateSpecialtyDto,
-  ) {
+    @Body() dto: UpdateSpecialtyDto,
+) {
     return this.specialtiesService.update(id, dto);
   }
 

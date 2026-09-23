@@ -981,10 +981,10 @@ export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  createdAt: 'createdAt',
   passwordHash: 'passwordHash',
   role: 'role',
-  active: 'active'
+  active: 'active',
+  createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1050,9 +1050,9 @@ export const AppointmentScalarFieldEnum = {
   price: 'price',
   painLevel: 'painLevel',
   sessionNotes: 'sessionNotes',
-  rescheduledFrom: 'rescheduledFrom',
   cancelledBy: 'cancelledBy',
   cancelReason: 'cancelReason',
+  rescheduledFromId: 'rescheduledFromId',
   createdAt: 'createdAt'
 } as const
 
@@ -1107,9 +1107,9 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
- * Reference to a field of type 'DateTime'
+ * Reference to a field of type 'UserRole'
  */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
     
 
 
@@ -1121,9 +1121,37 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'ServiceMode'
+ */
+export type EnumServiceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceMode'>
+    
+
+
+/**
+ * Reference to a field of type 'AppointmentStatus'
+ */
+export type EnumAppointmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AppointmentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CancellationActor'
+ */
+export type EnumCancellationActorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CancellationActor'>
     
 
 /**

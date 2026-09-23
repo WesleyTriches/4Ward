@@ -77,10 +77,10 @@ export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  createdAt: 'createdAt',
   passwordHash: 'passwordHash',
   role: 'role',
-  active: 'active'
+  active: 'active',
+  createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -146,9 +146,9 @@ export const AppointmentScalarFieldEnum = {
   price: 'price',
   painLevel: 'painLevel',
   sessionNotes: 'sessionNotes',
-  rescheduledFrom: 'rescheduledFrom',
   cancelledBy: 'cancelledBy',
   cancelReason: 'cancelReason',
+  rescheduledFromId: 'rescheduledFromId',
   createdAt: 'createdAt'
 } as const
 

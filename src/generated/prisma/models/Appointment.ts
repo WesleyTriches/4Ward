@@ -33,7 +33,7 @@ export type AppointmentAvgAggregateOutputType = {
   scheduleId: number | null
   price: number | null
   painLevel: number | null
-  rescheduledFrom: number | null
+  rescheduledFromId: number | null
 }
 
 export type AppointmentSumAggregateOutputType = {
@@ -43,7 +43,7 @@ export type AppointmentSumAggregateOutputType = {
   scheduleId: number | null
   price: number | null
   painLevel: number | null
-  rescheduledFrom: number | null
+  rescheduledFromId: number | null
 }
 
 export type AppointmentMinAggregateOutputType = {
@@ -51,14 +51,14 @@ export type AppointmentMinAggregateOutputType = {
   patientId: number | null
   physiotherapistId: number | null
   scheduleId: number | null
-  status: string | null
+  status: $Enums.AppointmentStatus | null
   reason: string | null
   price: number | null
   painLevel: number | null
   sessionNotes: string | null
-  rescheduledFrom: number | null
-  cancelledBy: string | null
+  cancelledBy: $Enums.CancellationActor | null
   cancelReason: string | null
+  rescheduledFromId: number | null
   createdAt: Date | null
 }
 
@@ -67,14 +67,14 @@ export type AppointmentMaxAggregateOutputType = {
   patientId: number | null
   physiotherapistId: number | null
   scheduleId: number | null
-  status: string | null
+  status: $Enums.AppointmentStatus | null
   reason: string | null
   price: number | null
   painLevel: number | null
   sessionNotes: string | null
-  rescheduledFrom: number | null
-  cancelledBy: string | null
+  cancelledBy: $Enums.CancellationActor | null
   cancelReason: string | null
+  rescheduledFromId: number | null
   createdAt: Date | null
 }
 
@@ -88,9 +88,9 @@ export type AppointmentCountAggregateOutputType = {
   price: number
   painLevel: number
   sessionNotes: number
-  rescheduledFrom: number
   cancelledBy: number
   cancelReason: number
+  rescheduledFromId: number
   createdAt: number
   _all: number
 }
@@ -103,7 +103,7 @@ export type AppointmentAvgAggregateInputType = {
   scheduleId?: true
   price?: true
   painLevel?: true
-  rescheduledFrom?: true
+  rescheduledFromId?: true
 }
 
 export type AppointmentSumAggregateInputType = {
@@ -113,7 +113,7 @@ export type AppointmentSumAggregateInputType = {
   scheduleId?: true
   price?: true
   painLevel?: true
-  rescheduledFrom?: true
+  rescheduledFromId?: true
 }
 
 export type AppointmentMinAggregateInputType = {
@@ -126,9 +126,9 @@ export type AppointmentMinAggregateInputType = {
   price?: true
   painLevel?: true
   sessionNotes?: true
-  rescheduledFrom?: true
   cancelledBy?: true
   cancelReason?: true
+  rescheduledFromId?: true
   createdAt?: true
 }
 
@@ -142,9 +142,9 @@ export type AppointmentMaxAggregateInputType = {
   price?: true
   painLevel?: true
   sessionNotes?: true
-  rescheduledFrom?: true
   cancelledBy?: true
   cancelReason?: true
+  rescheduledFromId?: true
   createdAt?: true
 }
 
@@ -158,9 +158,9 @@ export type AppointmentCountAggregateInputType = {
   price?: true
   painLevel?: true
   sessionNotes?: true
-  rescheduledFrom?: true
   cancelledBy?: true
   cancelReason?: true
+  rescheduledFromId?: true
   createdAt?: true
   _all?: true
 }
@@ -256,14 +256,14 @@ export type AppointmentGroupByOutputType = {
   patientId: number
   physiotherapistId: number
   scheduleId: number
-  status: string
+  status: $Enums.AppointmentStatus
   reason: string | null
   price: number
   painLevel: number | null
   sessionNotes: string | null
-  rescheduledFrom: number | null
-  cancelledBy: string | null
+  cancelledBy: $Enums.CancellationActor | null
   cancelReason: string | null
+  rescheduledFromId: number | null
   createdAt: Date
   _count: AppointmentCountAggregateOutputType | null
   _avg: AppointmentAvgAggregateOutputType | null
@@ -295,18 +295,20 @@ export type AppointmentWhereInput = {
   patientId?: Prisma.IntFilter<"Appointment"> | number
   physiotherapistId?: Prisma.IntFilter<"Appointment"> | number
   scheduleId?: Prisma.IntFilter<"Appointment"> | number
-  status?: Prisma.StringFilter<"Appointment"> | string
+  status?: Prisma.EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
   reason?: Prisma.StringNullableFilter<"Appointment"> | string | null
   price?: Prisma.FloatFilter<"Appointment"> | number
   painLevel?: Prisma.IntNullableFilter<"Appointment"> | number | null
   sessionNotes?: Prisma.StringNullableFilter<"Appointment"> | string | null
-  rescheduledFrom?: Prisma.IntNullableFilter<"Appointment"> | number | null
-  cancelledBy?: Prisma.StringNullableFilter<"Appointment"> | string | null
+  cancelledBy?: Prisma.EnumCancellationActorNullableFilter<"Appointment"> | $Enums.CancellationActor | null
   cancelReason?: Prisma.StringNullableFilter<"Appointment"> | string | null
+  rescheduledFromId?: Prisma.IntNullableFilter<"Appointment"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Appointment"> | Date | string
   patient?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
   physiotherapist?: Prisma.XOR<Prisma.PhysiotherapistScalarRelationFilter, Prisma.PhysiotherapistWhereInput>
   schedule?: Prisma.XOR<Prisma.ScheduleScalarRelationFilter, Prisma.ScheduleWhereInput>
+  rescheduledFrom?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
+  rescheduledTo?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
 }
 
@@ -320,38 +322,42 @@ export type AppointmentOrderByWithRelationInput = {
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelledBy?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   patient?: Prisma.ProfileOrderByWithRelationInput
   physiotherapist?: Prisma.PhysiotherapistOrderByWithRelationInput
   schedule?: Prisma.ScheduleOrderByWithRelationInput
+  rescheduledFrom?: Prisma.AppointmentOrderByWithRelationInput
+  rescheduledTo?: Prisma.AppointmentOrderByWithRelationInput
   review?: Prisma.ReviewOrderByWithRelationInput
 }
 
 export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   scheduleId?: number
+  rescheduledFromId?: number
   AND?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   OR?: Prisma.AppointmentWhereInput[]
   NOT?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   patientId?: Prisma.IntFilter<"Appointment"> | number
   physiotherapistId?: Prisma.IntFilter<"Appointment"> | number
-  status?: Prisma.StringFilter<"Appointment"> | string
+  status?: Prisma.EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
   reason?: Prisma.StringNullableFilter<"Appointment"> | string | null
   price?: Prisma.FloatFilter<"Appointment"> | number
   painLevel?: Prisma.IntNullableFilter<"Appointment"> | number | null
   sessionNotes?: Prisma.StringNullableFilter<"Appointment"> | string | null
-  rescheduledFrom?: Prisma.IntNullableFilter<"Appointment"> | number | null
-  cancelledBy?: Prisma.StringNullableFilter<"Appointment"> | string | null
+  cancelledBy?: Prisma.EnumCancellationActorNullableFilter<"Appointment"> | $Enums.CancellationActor | null
   cancelReason?: Prisma.StringNullableFilter<"Appointment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Appointment"> | Date | string
   patient?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
   physiotherapist?: Prisma.XOR<Prisma.PhysiotherapistScalarRelationFilter, Prisma.PhysiotherapistWhereInput>
   schedule?: Prisma.XOR<Prisma.ScheduleScalarRelationFilter, Prisma.ScheduleWhereInput>
+  rescheduledFrom?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
+  rescheduledTo?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
-}, "id" | "scheduleId">
+}, "id" | "scheduleId" | "rescheduledFromId">
 
 export type AppointmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -363,9 +369,9 @@ export type AppointmentOrderByWithAggregationInput = {
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelledBy?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AppointmentCountOrderByAggregateInput
   _avg?: Prisma.AppointmentAvgOrderByAggregateInput
@@ -382,30 +388,31 @@ export type AppointmentScalarWhereWithAggregatesInput = {
   patientId?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
   physiotherapistId?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
   scheduleId?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
-  status?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
+  status?: Prisma.EnumAppointmentStatusWithAggregatesFilter<"Appointment"> | $Enums.AppointmentStatus
   reason?: Prisma.StringNullableWithAggregatesFilter<"Appointment"> | string | null
   price?: Prisma.FloatWithAggregatesFilter<"Appointment"> | number
   painLevel?: Prisma.IntNullableWithAggregatesFilter<"Appointment"> | number | null
   sessionNotes?: Prisma.StringNullableWithAggregatesFilter<"Appointment"> | string | null
-  rescheduledFrom?: Prisma.IntNullableWithAggregatesFilter<"Appointment"> | number | null
-  cancelledBy?: Prisma.StringNullableWithAggregatesFilter<"Appointment"> | string | null
+  cancelledBy?: Prisma.EnumCancellationActorNullableWithAggregatesFilter<"Appointment"> | $Enums.CancellationActor | null
   cancelReason?: Prisma.StringNullableWithAggregatesFilter<"Appointment"> | string | null
+  rescheduledFromId?: Prisma.IntNullableWithAggregatesFilter<"Appointment"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Appointment"> | Date | string
 }
 
 export type AppointmentCreateInput = {
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
   createdAt?: Date | string
   patient: Prisma.ProfileCreateNestedOneWithoutAppointmentsInput
   physiotherapist: Prisma.PhysiotherapistCreateNestedOneWithoutAppointmentsInput
   schedule: Prisma.ScheduleCreateNestedOneWithoutAppointmentInput
+  rescheduledFrom?: Prisma.AppointmentCreateNestedOneWithoutRescheduledToInput
+  rescheduledTo?: Prisma.AppointmentCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewCreateNestedOneWithoutAppointmentInput
 }
 
@@ -414,31 +421,33 @@ export type AppointmentUncheckedCreateInput = {
   patientId: number
   physiotherapistId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutAppointmentInput
 }
 
 export type AppointmentUpdateInput = {
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
   physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
   schedule?: Prisma.ScheduleUpdateOneRequiredWithoutAppointmentNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -447,15 +456,16 @@ export type AppointmentUncheckedUpdateInput = {
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -464,25 +474,24 @@ export type AppointmentCreateManyInput = {
   patientId: number
   physiotherapistId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
 }
 
 export type AppointmentUpdateManyMutationInput = {
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -492,14 +501,14 @@ export type AppointmentUncheckedUpdateManyInput = {
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -528,9 +537,9 @@ export type AppointmentCountOrderByAggregateInput = {
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrder
   sessionNotes?: Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrder
   cancelledBy?: Prisma.SortOrder
   cancelReason?: Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -541,7 +550,7 @@ export type AppointmentAvgOrderByAggregateInput = {
   scheduleId?: Prisma.SortOrder
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrder
 }
 
 export type AppointmentMaxOrderByAggregateInput = {
@@ -554,9 +563,9 @@ export type AppointmentMaxOrderByAggregateInput = {
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrder
   sessionNotes?: Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrder
   cancelledBy?: Prisma.SortOrder
   cancelReason?: Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -570,9 +579,9 @@ export type AppointmentMinOrderByAggregateInput = {
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrder
   sessionNotes?: Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrder
   cancelledBy?: Prisma.SortOrder
   cancelReason?: Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -583,7 +592,7 @@ export type AppointmentSumOrderByAggregateInput = {
   scheduleId?: Prisma.SortOrder
   price?: Prisma.SortOrder
   painLevel?: Prisma.SortOrder
-  rescheduledFrom?: Prisma.SortOrder
+  rescheduledFromId?: Prisma.SortOrder
 }
 
 export type AppointmentScalarRelationFilter = {
@@ -707,12 +716,68 @@ export type AppointmentUncheckedUpdateOneWithoutScheduleNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AppointmentUpdateToOneWithWhereWithoutScheduleInput, Prisma.AppointmentUpdateWithoutScheduleInput>, Prisma.AppointmentUncheckedUpdateWithoutScheduleInput>
 }
 
+export type AppointmentCreateNestedOneWithoutRescheduledToInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledToInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledToInput>
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutRescheduledToInput
+  connect?: Prisma.AppointmentWhereUniqueInput
+}
+
+export type AppointmentCreateNestedOneWithoutRescheduledFromInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledFromInput>
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutRescheduledFromInput
+  connect?: Prisma.AppointmentWhereUniqueInput
+}
+
+export type AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledFromInput>
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutRescheduledFromInput
+  connect?: Prisma.AppointmentWhereUniqueInput
+}
+
+export type EnumAppointmentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.AppointmentStatus
+}
+
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type NullableEnumCancellationActorFieldUpdateOperationsInput = {
+  set?: $Enums.CancellationActor | null
+}
+
+export type AppointmentUpdateOneWithoutRescheduledToNestedInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledToInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledToInput>
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutRescheduledToInput
+  upsert?: Prisma.AppointmentUpsertWithoutRescheduledToInput
+  disconnect?: Prisma.AppointmentWhereInput | boolean
+  delete?: Prisma.AppointmentWhereInput | boolean
+  connect?: Prisma.AppointmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppointmentUpdateToOneWithWhereWithoutRescheduledToInput, Prisma.AppointmentUpdateWithoutRescheduledToInput>, Prisma.AppointmentUncheckedUpdateWithoutRescheduledToInput>
+}
+
+export type AppointmentUpdateOneWithoutRescheduledFromNestedInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledFromInput>
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutRescheduledFromInput
+  upsert?: Prisma.AppointmentUpsertWithoutRescheduledFromInput
+  disconnect?: Prisma.AppointmentWhereInput | boolean
+  delete?: Prisma.AppointmentWhereInput | boolean
+  connect?: Prisma.AppointmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppointmentUpdateToOneWithWhereWithoutRescheduledFromInput, Prisma.AppointmentUpdateWithoutRescheduledFromInput>, Prisma.AppointmentUncheckedUpdateWithoutRescheduledFromInput>
+}
+
+export type AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledFromInput>
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutRescheduledFromInput
+  upsert?: Prisma.AppointmentUpsertWithoutRescheduledFromInput
+  disconnect?: Prisma.AppointmentWhereInput | boolean
+  delete?: Prisma.AppointmentWhereInput | boolean
+  connect?: Prisma.AppointmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppointmentUpdateToOneWithWhereWithoutRescheduledFromInput, Prisma.AppointmentUpdateWithoutRescheduledFromInput>, Prisma.AppointmentUncheckedUpdateWithoutRescheduledFromInput>
 }
 
 export type AppointmentCreateNestedOneWithoutReviewInput = {
@@ -730,17 +795,18 @@ export type AppointmentUpdateOneRequiredWithoutReviewNestedInput = {
 }
 
 export type AppointmentCreateWithoutPatientInput = {
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
   createdAt?: Date | string
   physiotherapist: Prisma.PhysiotherapistCreateNestedOneWithoutAppointmentsInput
   schedule: Prisma.ScheduleCreateNestedOneWithoutAppointmentInput
+  rescheduledFrom?: Prisma.AppointmentCreateNestedOneWithoutRescheduledToInput
+  rescheduledTo?: Prisma.AppointmentCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewCreateNestedOneWithoutAppointmentInput
 }
 
@@ -748,15 +814,16 @@ export type AppointmentUncheckedCreateWithoutPatientInput = {
   id?: number
   physiotherapistId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutAppointmentInput
 }
 
@@ -793,29 +860,30 @@ export type AppointmentScalarWhereInput = {
   patientId?: Prisma.IntFilter<"Appointment"> | number
   physiotherapistId?: Prisma.IntFilter<"Appointment"> | number
   scheduleId?: Prisma.IntFilter<"Appointment"> | number
-  status?: Prisma.StringFilter<"Appointment"> | string
+  status?: Prisma.EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
   reason?: Prisma.StringNullableFilter<"Appointment"> | string | null
   price?: Prisma.FloatFilter<"Appointment"> | number
   painLevel?: Prisma.IntNullableFilter<"Appointment"> | number | null
   sessionNotes?: Prisma.StringNullableFilter<"Appointment"> | string | null
-  rescheduledFrom?: Prisma.IntNullableFilter<"Appointment"> | number | null
-  cancelledBy?: Prisma.StringNullableFilter<"Appointment"> | string | null
+  cancelledBy?: Prisma.EnumCancellationActorNullableFilter<"Appointment"> | $Enums.CancellationActor | null
   cancelReason?: Prisma.StringNullableFilter<"Appointment"> | string | null
+  rescheduledFromId?: Prisma.IntNullableFilter<"Appointment"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Appointment"> | Date | string
 }
 
 export type AppointmentCreateWithoutPhysiotherapistInput = {
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
   createdAt?: Date | string
   patient: Prisma.ProfileCreateNestedOneWithoutAppointmentsInput
   schedule: Prisma.ScheduleCreateNestedOneWithoutAppointmentInput
+  rescheduledFrom?: Prisma.AppointmentCreateNestedOneWithoutRescheduledToInput
+  rescheduledTo?: Prisma.AppointmentCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewCreateNestedOneWithoutAppointmentInput
 }
 
@@ -823,15 +891,16 @@ export type AppointmentUncheckedCreateWithoutPhysiotherapistInput = {
   id?: number
   patientId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutAppointmentInput
 }
 
@@ -861,17 +930,18 @@ export type AppointmentUpdateManyWithWhereWithoutPhysiotherapistInput = {
 }
 
 export type AppointmentCreateWithoutScheduleInput = {
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
   createdAt?: Date | string
   patient: Prisma.ProfileCreateNestedOneWithoutAppointmentsInput
   physiotherapist: Prisma.PhysiotherapistCreateNestedOneWithoutAppointmentsInput
+  rescheduledFrom?: Prisma.AppointmentCreateNestedOneWithoutRescheduledToInput
+  rescheduledTo?: Prisma.AppointmentCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewCreateNestedOneWithoutAppointmentInput
 }
 
@@ -879,15 +949,16 @@ export type AppointmentUncheckedCreateWithoutScheduleInput = {
   id?: number
   patientId: number
   physiotherapistId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput
   review?: Prisma.ReviewUncheckedCreateNestedOneWithoutAppointmentInput
 }
 
@@ -908,17 +979,18 @@ export type AppointmentUpdateToOneWithWhereWithoutScheduleInput = {
 }
 
 export type AppointmentUpdateWithoutScheduleInput = {
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
   physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -926,31 +998,197 @@ export type AppointmentUncheckedUpdateWithoutScheduleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
 }
 
-export type AppointmentCreateWithoutReviewInput = {
-  status: string
+export type AppointmentCreateWithoutRescheduledToInput = {
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
   createdAt?: Date | string
   patient: Prisma.ProfileCreateNestedOneWithoutAppointmentsInput
   physiotherapist: Prisma.PhysiotherapistCreateNestedOneWithoutAppointmentsInput
   schedule: Prisma.ScheduleCreateNestedOneWithoutAppointmentInput
+  rescheduledFrom?: Prisma.AppointmentCreateNestedOneWithoutRescheduledToInput
+  review?: Prisma.ReviewCreateNestedOneWithoutAppointmentInput
+}
+
+export type AppointmentUncheckedCreateWithoutRescheduledToInput = {
+  id?: number
+  patientId: number
+  physiotherapistId: number
+  scheduleId: number
+  status?: $Enums.AppointmentStatus
+  reason?: string | null
+  price: number
+  painLevel?: number | null
+  sessionNotes?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
+  cancelReason?: string | null
+  rescheduledFromId?: number | null
+  createdAt?: Date | string
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutAppointmentInput
+}
+
+export type AppointmentCreateOrConnectWithoutRescheduledToInput = {
+  where: Prisma.AppointmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledToInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledToInput>
+}
+
+export type AppointmentCreateWithoutRescheduledFromInput = {
+  status?: $Enums.AppointmentStatus
+  reason?: string | null
+  price: number
+  painLevel?: number | null
+  sessionNotes?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
+  cancelReason?: string | null
+  createdAt?: Date | string
+  patient: Prisma.ProfileCreateNestedOneWithoutAppointmentsInput
+  physiotherapist: Prisma.PhysiotherapistCreateNestedOneWithoutAppointmentsInput
+  schedule: Prisma.ScheduleCreateNestedOneWithoutAppointmentInput
+  rescheduledTo?: Prisma.AppointmentCreateNestedOneWithoutRescheduledFromInput
+  review?: Prisma.ReviewCreateNestedOneWithoutAppointmentInput
+}
+
+export type AppointmentUncheckedCreateWithoutRescheduledFromInput = {
+  id?: number
+  patientId: number
+  physiotherapistId: number
+  scheduleId: number
+  status?: $Enums.AppointmentStatus
+  reason?: string | null
+  price: number
+  painLevel?: number | null
+  sessionNotes?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
+  cancelReason?: string | null
+  createdAt?: Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput
+  review?: Prisma.ReviewUncheckedCreateNestedOneWithoutAppointmentInput
+}
+
+export type AppointmentCreateOrConnectWithoutRescheduledFromInput = {
+  where: Prisma.AppointmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledFromInput>
+}
+
+export type AppointmentUpsertWithoutRescheduledToInput = {
+  update: Prisma.XOR<Prisma.AppointmentUpdateWithoutRescheduledToInput, Prisma.AppointmentUncheckedUpdateWithoutRescheduledToInput>
+  create: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledToInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledToInput>
+  where?: Prisma.AppointmentWhereInput
+}
+
+export type AppointmentUpdateToOneWithWhereWithoutRescheduledToInput = {
+  where?: Prisma.AppointmentWhereInput
+  data: Prisma.XOR<Prisma.AppointmentUpdateWithoutRescheduledToInput, Prisma.AppointmentUncheckedUpdateWithoutRescheduledToInput>
+}
+
+export type AppointmentUpdateWithoutRescheduledToInput = {
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
+  physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
+  schedule?: Prisma.ScheduleUpdateOneRequiredWithoutAppointmentNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
+}
+
+export type AppointmentUncheckedUpdateWithoutRescheduledToInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
+}
+
+export type AppointmentUpsertWithoutRescheduledFromInput = {
+  update: Prisma.XOR<Prisma.AppointmentUpdateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedUpdateWithoutRescheduledFromInput>
+  create: Prisma.XOR<Prisma.AppointmentCreateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedCreateWithoutRescheduledFromInput>
+  where?: Prisma.AppointmentWhereInput
+}
+
+export type AppointmentUpdateToOneWithWhereWithoutRescheduledFromInput = {
+  where?: Prisma.AppointmentWhereInput
+  data: Prisma.XOR<Prisma.AppointmentUpdateWithoutRescheduledFromInput, Prisma.AppointmentUncheckedUpdateWithoutRescheduledFromInput>
+}
+
+export type AppointmentUpdateWithoutRescheduledFromInput = {
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
+  physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
+  schedule?: Prisma.ScheduleUpdateOneRequiredWithoutAppointmentNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
+}
+
+export type AppointmentUncheckedUpdateWithoutRescheduledFromInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
+  scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
+}
+
+export type AppointmentCreateWithoutReviewInput = {
+  status?: $Enums.AppointmentStatus
+  reason?: string | null
+  price: number
+  painLevel?: number | null
+  sessionNotes?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
+  cancelReason?: string | null
+  createdAt?: Date | string
+  patient: Prisma.ProfileCreateNestedOneWithoutAppointmentsInput
+  physiotherapist: Prisma.PhysiotherapistCreateNestedOneWithoutAppointmentsInput
+  schedule: Prisma.ScheduleCreateNestedOneWithoutAppointmentInput
+  rescheduledFrom?: Prisma.AppointmentCreateNestedOneWithoutRescheduledToInput
+  rescheduledTo?: Prisma.AppointmentCreateNestedOneWithoutRescheduledFromInput
 }
 
 export type AppointmentUncheckedCreateWithoutReviewInput = {
@@ -958,15 +1196,16 @@ export type AppointmentUncheckedCreateWithoutReviewInput = {
   patientId: number
   physiotherapistId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedCreateNestedOneWithoutRescheduledFromInput
 }
 
 export type AppointmentCreateOrConnectWithoutReviewInput = {
@@ -986,18 +1225,19 @@ export type AppointmentUpdateToOneWithWhereWithoutReviewInput = {
 }
 
 export type AppointmentUpdateWithoutReviewInput = {
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
   physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
   schedule?: Prisma.ScheduleUpdateOneRequiredWithoutAppointmentNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
 }
 
 export type AppointmentUncheckedUpdateWithoutReviewInput = {
@@ -1005,44 +1245,46 @@ export type AppointmentUncheckedUpdateWithoutReviewInput = {
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
 }
 
 export type AppointmentCreateManyPatientInput = {
   id?: number
   physiotherapistId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
 }
 
 export type AppointmentUpdateWithoutPatientInput = {
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
   schedule?: Prisma.ScheduleUpdateOneRequiredWithoutAppointmentNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -1050,15 +1292,16 @@ export type AppointmentUncheckedUpdateWithoutPatientInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -1066,14 +1309,14 @@ export type AppointmentUncheckedUpdateManyWithoutPatientInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1081,29 +1324,30 @@ export type AppointmentCreateManyPhysiotherapistInput = {
   id?: number
   patientId: number
   scheduleId: number
-  status: string
+  status?: $Enums.AppointmentStatus
   reason?: string | null
   price: number
   painLevel?: number | null
   sessionNotes?: string | null
-  rescheduledFrom?: number | null
-  cancelledBy?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
   cancelReason?: string | null
+  rescheduledFromId?: number | null
   createdAt?: Date | string
 }
 
 export type AppointmentUpdateWithoutPhysiotherapistInput = {
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
   schedule?: Prisma.ScheduleUpdateOneRequiredWithoutAppointmentNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -1111,15 +1355,16 @@ export type AppointmentUncheckedUpdateWithoutPhysiotherapistInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
   review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
 }
 
@@ -1127,14 +1372,14 @@ export type AppointmentUncheckedUpdateManyWithoutPhysiotherapistInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFrom?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  cancelledBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1150,13 +1395,15 @@ export type AppointmentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   price?: boolean
   painLevel?: boolean
   sessionNotes?: boolean
-  rescheduledFrom?: boolean
   cancelledBy?: boolean
   cancelReason?: boolean
+  rescheduledFromId?: boolean
   createdAt?: boolean
   patient?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   physiotherapist?: boolean | Prisma.PhysiotherapistDefaultArgs<ExtArgs>
   schedule?: boolean | Prisma.ScheduleDefaultArgs<ExtArgs>
+  rescheduledFrom?: boolean | Prisma.Appointment$rescheduledFromArgs<ExtArgs>
+  rescheduledTo?: boolean | Prisma.Appointment$rescheduledToArgs<ExtArgs>
   review?: boolean | Prisma.Appointment$reviewArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
 
@@ -1170,13 +1417,14 @@ export type AppointmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   price?: boolean
   painLevel?: boolean
   sessionNotes?: boolean
-  rescheduledFrom?: boolean
   cancelledBy?: boolean
   cancelReason?: boolean
+  rescheduledFromId?: boolean
   createdAt?: boolean
   patient?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   physiotherapist?: boolean | Prisma.PhysiotherapistDefaultArgs<ExtArgs>
   schedule?: boolean | Prisma.ScheduleDefaultArgs<ExtArgs>
+  rescheduledFrom?: boolean | Prisma.Appointment$rescheduledFromArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
 
 export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1189,13 +1437,14 @@ export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   price?: boolean
   painLevel?: boolean
   sessionNotes?: boolean
-  rescheduledFrom?: boolean
   cancelledBy?: boolean
   cancelReason?: boolean
+  rescheduledFromId?: boolean
   createdAt?: boolean
   patient?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   physiotherapist?: boolean | Prisma.PhysiotherapistDefaultArgs<ExtArgs>
   schedule?: boolean | Prisma.ScheduleDefaultArgs<ExtArgs>
+  rescheduledFrom?: boolean | Prisma.Appointment$rescheduledFromArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
 
 export type AppointmentSelectScalar = {
@@ -1208,28 +1457,32 @@ export type AppointmentSelectScalar = {
   price?: boolean
   painLevel?: boolean
   sessionNotes?: boolean
-  rescheduledFrom?: boolean
   cancelledBy?: boolean
   cancelReason?: boolean
+  rescheduledFromId?: boolean
   createdAt?: boolean
 }
 
-export type AppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "patientId" | "physiotherapistId" | "scheduleId" | "status" | "reason" | "price" | "painLevel" | "sessionNotes" | "rescheduledFrom" | "cancelledBy" | "cancelReason" | "createdAt", ExtArgs["result"]["appointment"]>
+export type AppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "patientId" | "physiotherapistId" | "scheduleId" | "status" | "reason" | "price" | "painLevel" | "sessionNotes" | "cancelledBy" | "cancelReason" | "rescheduledFromId" | "createdAt", ExtArgs["result"]["appointment"]>
 export type AppointmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   physiotherapist?: boolean | Prisma.PhysiotherapistDefaultArgs<ExtArgs>
   schedule?: boolean | Prisma.ScheduleDefaultArgs<ExtArgs>
+  rescheduledFrom?: boolean | Prisma.Appointment$rescheduledFromArgs<ExtArgs>
+  rescheduledTo?: boolean | Prisma.Appointment$rescheduledToArgs<ExtArgs>
   review?: boolean | Prisma.Appointment$reviewArgs<ExtArgs>
 }
 export type AppointmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   physiotherapist?: boolean | Prisma.PhysiotherapistDefaultArgs<ExtArgs>
   schedule?: boolean | Prisma.ScheduleDefaultArgs<ExtArgs>
+  rescheduledFrom?: boolean | Prisma.Appointment$rescheduledFromArgs<ExtArgs>
 }
 export type AppointmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
   physiotherapist?: boolean | Prisma.PhysiotherapistDefaultArgs<ExtArgs>
   schedule?: boolean | Prisma.ScheduleDefaultArgs<ExtArgs>
+  rescheduledFrom?: boolean | Prisma.Appointment$rescheduledFromArgs<ExtArgs>
 }
 
 export type $AppointmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1238,6 +1491,8 @@ export type $AppointmentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     patient: Prisma.$ProfilePayload<ExtArgs>
     physiotherapist: Prisma.$PhysiotherapistPayload<ExtArgs>
     schedule: Prisma.$SchedulePayload<ExtArgs>
+    rescheduledFrom: Prisma.$AppointmentPayload<ExtArgs> | null
+    rescheduledTo: Prisma.$AppointmentPayload<ExtArgs> | null
     review: Prisma.$ReviewPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1245,14 +1500,14 @@ export type $AppointmentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     patientId: number
     physiotherapistId: number
     scheduleId: number
-    status: string
+    status: $Enums.AppointmentStatus
     reason: string | null
     price: number
     painLevel: number | null
     sessionNotes: string | null
-    rescheduledFrom: number | null
-    cancelledBy: string | null
+    cancelledBy: $Enums.CancellationActor | null
     cancelReason: string | null
+    rescheduledFromId: number | null
     createdAt: Date
   }, ExtArgs["result"]["appointment"]>
   composites: {}
@@ -1651,6 +1906,8 @@ export interface Prisma__AppointmentClient<T, Null = never, ExtArgs extends runt
   patient<T extends Prisma.ProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   physiotherapist<T extends Prisma.PhysiotherapistDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PhysiotherapistDefaultArgs<ExtArgs>>): Prisma.Prisma__PhysiotherapistClient<runtime.Types.Result.GetResult<Prisma.$PhysiotherapistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   schedule<T extends Prisma.ScheduleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ScheduleDefaultArgs<ExtArgs>>): Prisma.Prisma__ScheduleClient<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  rescheduledFrom<T extends Prisma.Appointment$rescheduledFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Appointment$rescheduledFromArgs<ExtArgs>>): Prisma.Prisma__AppointmentClient<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  rescheduledTo<T extends Prisma.Appointment$rescheduledToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Appointment$rescheduledToArgs<ExtArgs>>): Prisma.Prisma__AppointmentClient<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   review<T extends Prisma.Appointment$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Appointment$reviewArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1685,14 +1942,14 @@ export interface AppointmentFieldRefs {
   readonly patientId: Prisma.FieldRef<"Appointment", 'Int'>
   readonly physiotherapistId: Prisma.FieldRef<"Appointment", 'Int'>
   readonly scheduleId: Prisma.FieldRef<"Appointment", 'Int'>
-  readonly status: Prisma.FieldRef<"Appointment", 'String'>
+  readonly status: Prisma.FieldRef<"Appointment", 'AppointmentStatus'>
   readonly reason: Prisma.FieldRef<"Appointment", 'String'>
   readonly price: Prisma.FieldRef<"Appointment", 'Float'>
   readonly painLevel: Prisma.FieldRef<"Appointment", 'Int'>
   readonly sessionNotes: Prisma.FieldRef<"Appointment", 'String'>
-  readonly rescheduledFrom: Prisma.FieldRef<"Appointment", 'Int'>
-  readonly cancelledBy: Prisma.FieldRef<"Appointment", 'String'>
+  readonly cancelledBy: Prisma.FieldRef<"Appointment", 'CancellationActor'>
   readonly cancelReason: Prisma.FieldRef<"Appointment", 'String'>
+  readonly rescheduledFromId: Prisma.FieldRef<"Appointment", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Appointment", 'DateTime'>
 }
     
@@ -2090,6 +2347,44 @@ export type AppointmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Appointments to delete.
    */
   limit?: number
+}
+
+/**
+ * Appointment.rescheduledFrom
+ */
+export type Appointment$rescheduledFromArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Appointment
+   */
+  select?: Prisma.AppointmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Appointment
+   */
+  omit?: Prisma.AppointmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppointmentInclude<ExtArgs> | null
+  where?: Prisma.AppointmentWhereInput
+}
+
+/**
+ * Appointment.rescheduledTo
+ */
+export type Appointment$rescheduledToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Appointment
+   */
+  select?: Prisma.AppointmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Appointment
+   */
+  omit?: Prisma.AppointmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppointmentInclude<ExtArgs> | null
+  where?: Prisma.AppointmentWhereInput
 }
 
 /**

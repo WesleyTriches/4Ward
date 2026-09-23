@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { PhysiotherapistsService } from './physiotherapists.service';
 import { PhysiotherapistsController } from './physiotherapists.controller';
+import { PhysiotherapistsService } from './physiotherapists.service';
+import { PrismaService } from 'src/database/prisma.service';
 
 @Module({
-  providers: [PhysiotherapistsService],
-  controllers: [PhysiotherapistsController]
+  controllers: [PhysiotherapistsController],
+  providers: [
+    PhysiotherapistsService,
+    PrismaService,
+  ],
 })
 export class PhysiotherapistsModule {}

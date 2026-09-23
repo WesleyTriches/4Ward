@@ -1,6 +1,9 @@
-POST http://localhost:3000/api/profiles
+@baseUrl = http://localhost:3000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
+
+POST {{baseUrl}}/profiles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc4OTk1MDQ1MSwiZXhwIjoxNzkwMDM2ODUxfQ.sRZQ9cWfEFap2-e00D2w70znX6baXylV2Txej6KZQ_w
+Authorization: Bearer {{token}}
 
 {
 "userId": 1,
@@ -9,16 +12,51 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsI
 "avatarUrl": "pudim.com"
 }
 
-###
-GET http://localhost:3000/api/profiles/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc4OTk1MDQ1MSwiZXhwIjoxNzkwMDM2ODUxfQ.sRZQ9cWfEFap2-e00D2w70znX6baXylV2Txej6KZQ_w
+### Buscar meu perfil
+GET {{baseUrl}}/profiles/me
+Authorization: Bearer {{token}}
 
-###
-PUT http://localhost:3000/api/profiles/1
-Content-Type: application/json
 
 {
 "fullName": "Joazão",
 "birthDate": "1990-01-15T00:00:00Z",
 "avatarUrl": "pudim.com"
+}
+
+###
+POST {{baseUrl}}/profiles
+Authorization: Bearer {{token}}
+
+### Atualizar meu perfil
+PUT http://localhost:3000/api/profiles/me
+Authorization: Bearer TOKEN_DO_USUARIO
+Content-Type: application/json
+
+{
+  "fullName": "João Silva"
+}
+
+{
+  "userId": 3,
+  "fullName": "João da Silva",
+  "phone": "54999999999"
+}
+
+###
+POST {{baseUrl}}/profiles
+Authorization: Bearer {{token}}
+
+{
+  "userId": 5,
+  "fullName": "Maria da Silva"
+}
+
+###
+POST {{baseUrl}}/profiles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "userId": 7,
+  "fullName": "testew"
 }

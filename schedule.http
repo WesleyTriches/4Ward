@@ -1,14 +1,17 @@
 @baseUrl = http://localhost:3000/api
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
 
-GET {{baseUrl}}/users
+### Criar horário disponível
+POST {{baseUrl}}/schedules
 Authorization: Bearer {{token}}
-
-###
-PUT {{baseUrl}}/1
 Content-Type: application/json
 
 {
-    "name": "usuario alterado",
-    "email": "outroemail@upf.br"
+  "dateTime": "2026-09-25T14:00:00Z"
 }
+
+###
+GET {{baseUrl}}/schedules?physiotherapistId=1
+Authorization: Bearer {{token}}
+
+

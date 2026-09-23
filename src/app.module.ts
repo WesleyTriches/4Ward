@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { SpecialtiesModule } from './specialties/specialties.module';
 import { PhysiotherapistsModule } from './physiotherapists/physiotherapists.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 
 @Module({
@@ -13,7 +14,7 @@ import { PhysiotherapistsModule } from './physiotherapists/physiotherapists.modu
     UsersModule, 
     ProfilesModule, 
     AuthModule, 
-    SpecialtiesModule, PhysiotherapistsModule], //conectar sub modulos
+    SpecialtiesModule, PhysiotherapistsModule, SchedulesModule], //conectar sub modulos
   controllers: [],
   providers: [],
 })

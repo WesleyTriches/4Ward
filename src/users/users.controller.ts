@@ -9,16 +9,16 @@ export class UsersController {
        private service: UsersService
     ) { }
 
-    @Post()
-    async create(@Body() body: CreateUserDTO) {
-        //chamar o service aqui
-        await this.service.createUser(body);
-    }
+    // @Post()
+    // async create(@Body() body: CreateUserDTO) {
+    //     //chamar o service aqui
+    //     await this.service.createUser(body);
+    // }
 
-    @Get()
-    async findAll() {
-        return await this.service.getAllUsers();
-    }
+    // @Get()
+    // async findAll() {
+    //     return await this.service.getAllUsers();
+    // }
 
     @Put(':id')
     async update(@Param('id', ParseIntPipe) id: number, 
