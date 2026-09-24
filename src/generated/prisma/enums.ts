@@ -9,7 +9,36 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserRole = {
+  PATIENT: 'PATIENT',
+  PHYSIOTHERAPIST: 'PHYSIOTHERAPIST'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ServiceMode = {
+  IN_PERSON: 'IN_PERSON',
+  ONLINE: 'ONLINE',
+  BOTH: 'BOTH'
+} as const
+
+export type ServiceMode = (typeof ServiceMode)[keyof typeof ServiceMode]
+
+
+export const AppointmentStatus = {
+  SCHEDULED: 'SCHEDULED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  NO_SHOW: 'NO_SHOW'
+} as const
+
+export type AppointmentStatus = (typeof AppointmentStatus)[keyof typeof AppointmentStatus]
+
+
+export const CancellationActor = {
+  PATIENT: 'PATIENT',
+  PHYSIOTHERAPIST: 'PHYSIOTHERAPIST'
+} as const
+
+export type CancellationActor = (typeof CancellationActor)[keyof typeof CancellationActor]

@@ -52,7 +52,7 @@ export type PhysiotherapistMinAggregateOutputType = {
   bio: string | null
   sessionPrice: number | null
   city: string | null
-  serviceMode: string | null
+  serviceMode: $Enums.ServiceMode | null
   experienceYears: number | null
   rating: number | null
 }
@@ -65,7 +65,7 @@ export type PhysiotherapistMaxAggregateOutputType = {
   bio: string | null
   sessionPrice: number | null
   city: string | null
-  serviceMode: string | null
+  serviceMode: $Enums.ServiceMode | null
   experienceYears: number | null
   rating: number | null
 }
@@ -237,7 +237,7 @@ export type PhysiotherapistGroupByOutputType = {
   bio: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating: number | null
   _count: PhysiotherapistCountAggregateOutputType | null
@@ -273,7 +273,7 @@ export type PhysiotherapistWhereInput = {
   bio?: Prisma.StringNullableFilter<"Physiotherapist"> | string | null
   sessionPrice?: Prisma.FloatFilter<"Physiotherapist"> | number
   city?: Prisma.StringFilter<"Physiotherapist"> | string
-  serviceMode?: Prisma.StringFilter<"Physiotherapist"> | string
+  serviceMode?: Prisma.EnumServiceModeFilter<"Physiotherapist"> | $Enums.ServiceMode
   experienceYears?: Prisma.IntFilter<"Physiotherapist"> | number
   rating?: Prisma.FloatNullableFilter<"Physiotherapist"> | number | null
   profile?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
@@ -310,7 +310,7 @@ export type PhysiotherapistWhereUniqueInput = Prisma.AtLeast<{
   bio?: Prisma.StringNullableFilter<"Physiotherapist"> | string | null
   sessionPrice?: Prisma.FloatFilter<"Physiotherapist"> | number
   city?: Prisma.StringFilter<"Physiotherapist"> | string
-  serviceMode?: Prisma.StringFilter<"Physiotherapist"> | string
+  serviceMode?: Prisma.EnumServiceModeFilter<"Physiotherapist"> | $Enums.ServiceMode
   experienceYears?: Prisma.IntFilter<"Physiotherapist"> | number
   rating?: Prisma.FloatNullableFilter<"Physiotherapist"> | number | null
   profile?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
@@ -348,7 +348,7 @@ export type PhysiotherapistScalarWhereWithAggregatesInput = {
   bio?: Prisma.StringNullableWithAggregatesFilter<"Physiotherapist"> | string | null
   sessionPrice?: Prisma.FloatWithAggregatesFilter<"Physiotherapist"> | number
   city?: Prisma.StringWithAggregatesFilter<"Physiotherapist"> | string
-  serviceMode?: Prisma.StringWithAggregatesFilter<"Physiotherapist"> | string
+  serviceMode?: Prisma.EnumServiceModeWithAggregatesFilter<"Physiotherapist"> | $Enums.ServiceMode
   experienceYears?: Prisma.IntWithAggregatesFilter<"Physiotherapist"> | number
   rating?: Prisma.FloatNullableWithAggregatesFilter<"Physiotherapist"> | number | null
 }
@@ -358,7 +358,7 @@ export type PhysiotherapistCreateInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   profile: Prisma.ProfileCreateNestedOneWithoutPhysiotherapistInput
@@ -375,7 +375,7 @@ export type PhysiotherapistUncheckedCreateInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutPhysiotherapistInput
@@ -387,7 +387,7 @@ export type PhysiotherapistUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   profile?: Prisma.ProfileUpdateOneRequiredWithoutPhysiotherapistNestedInput
@@ -404,7 +404,7 @@ export type PhysiotherapistUncheckedUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutPhysiotherapistNestedInput
@@ -419,7 +419,7 @@ export type PhysiotherapistCreateManyInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
 }
@@ -429,7 +429,7 @@ export type PhysiotherapistUpdateManyMutationInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
@@ -442,7 +442,7 @@ export type PhysiotherapistUncheckedUpdateManyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
@@ -606,6 +606,10 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type EnumServiceModeFieldUpdateOperationsInput = {
+  set?: $Enums.ServiceMode
+}
+
 export type NullableFloatFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -647,7 +651,7 @@ export type PhysiotherapistCreateWithoutProfileInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   specialty: Prisma.SpecialtyCreateNestedOneWithoutPhysiotherapistsInput
@@ -662,7 +666,7 @@ export type PhysiotherapistUncheckedCreateWithoutProfileInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutPhysiotherapistInput
@@ -690,7 +694,7 @@ export type PhysiotherapistUpdateWithoutProfileInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   specialty?: Prisma.SpecialtyUpdateOneRequiredWithoutPhysiotherapistsNestedInput
@@ -705,7 +709,7 @@ export type PhysiotherapistUncheckedUpdateWithoutProfileInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutPhysiotherapistNestedInput
@@ -717,7 +721,7 @@ export type PhysiotherapistCreateWithoutSpecialtyInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   profile: Prisma.ProfileCreateNestedOneWithoutPhysiotherapistInput
@@ -732,7 +736,7 @@ export type PhysiotherapistUncheckedCreateWithoutSpecialtyInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutPhysiotherapistInput
@@ -775,7 +779,7 @@ export type PhysiotherapistScalarWhereInput = {
   bio?: Prisma.StringNullableFilter<"Physiotherapist"> | string | null
   sessionPrice?: Prisma.FloatFilter<"Physiotherapist"> | number
   city?: Prisma.StringFilter<"Physiotherapist"> | string
-  serviceMode?: Prisma.StringFilter<"Physiotherapist"> | string
+  serviceMode?: Prisma.EnumServiceModeFilter<"Physiotherapist"> | $Enums.ServiceMode
   experienceYears?: Prisma.IntFilter<"Physiotherapist"> | number
   rating?: Prisma.FloatNullableFilter<"Physiotherapist"> | number | null
 }
@@ -785,7 +789,7 @@ export type PhysiotherapistCreateWithoutSchedulesInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   profile: Prisma.ProfileCreateNestedOneWithoutPhysiotherapistInput
@@ -801,7 +805,7 @@ export type PhysiotherapistUncheckedCreateWithoutSchedulesInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutPhysiotherapistInput
@@ -828,7 +832,7 @@ export type PhysiotherapistUpdateWithoutSchedulesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   profile?: Prisma.ProfileUpdateOneRequiredWithoutPhysiotherapistNestedInput
@@ -844,7 +848,7 @@ export type PhysiotherapistUncheckedUpdateWithoutSchedulesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutPhysiotherapistNestedInput
@@ -855,7 +859,7 @@ export type PhysiotherapistCreateWithoutAppointmentsInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   profile: Prisma.ProfileCreateNestedOneWithoutPhysiotherapistInput
@@ -871,7 +875,7 @@ export type PhysiotherapistUncheckedCreateWithoutAppointmentsInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutPhysiotherapistInput
@@ -898,7 +902,7 @@ export type PhysiotherapistUpdateWithoutAppointmentsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   profile?: Prisma.ProfileUpdateOneRequiredWithoutPhysiotherapistNestedInput
@@ -914,7 +918,7 @@ export type PhysiotherapistUncheckedUpdateWithoutAppointmentsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutPhysiotherapistNestedInput
@@ -927,7 +931,7 @@ export type PhysiotherapistCreateManySpecialtyInput = {
   bio?: string | null
   sessionPrice: number
   city: string
-  serviceMode: string
+  serviceMode: $Enums.ServiceMode
   experienceYears: number
   rating?: number | null
 }
@@ -937,7 +941,7 @@ export type PhysiotherapistUpdateWithoutSpecialtyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   profile?: Prisma.ProfileUpdateOneRequiredWithoutPhysiotherapistNestedInput
@@ -952,7 +956,7 @@ export type PhysiotherapistUncheckedUpdateWithoutSpecialtyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutPhysiotherapistNestedInput
@@ -966,7 +970,7 @@ export type PhysiotherapistUncheckedUpdateManyWithoutSpecialtyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceMode?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceMode?: Prisma.EnumServiceModeFieldUpdateOperationsInput | $Enums.ServiceMode
   experienceYears?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
@@ -1105,7 +1109,7 @@ export type $PhysiotherapistPayload<ExtArgs extends runtime.Types.Extensions.Int
     bio: string | null
     sessionPrice: number
     city: string
-    serviceMode: string
+    serviceMode: $Enums.ServiceMode
     experienceYears: number
     rating: number | null
   }, ExtArgs["result"]["physiotherapist"]>
@@ -1542,7 +1546,7 @@ export interface PhysiotherapistFieldRefs {
   readonly bio: Prisma.FieldRef<"Physiotherapist", 'String'>
   readonly sessionPrice: Prisma.FieldRef<"Physiotherapist", 'Float'>
   readonly city: Prisma.FieldRef<"Physiotherapist", 'String'>
-  readonly serviceMode: Prisma.FieldRef<"Physiotherapist", 'String'>
+  readonly serviceMode: Prisma.FieldRef<"Physiotherapist", 'ServiceMode'>
   readonly experienceYears: Prisma.FieldRef<"Physiotherapist", 'Int'>
   readonly rating: Prisma.FieldRef<"Physiotherapist", 'Float'>
 }

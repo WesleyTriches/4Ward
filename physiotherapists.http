@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:3000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
+
+POST {{baseUrl}}/physiotherapists
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "specialtyId": 1,
+  "crefito": "123456-F",
+  "bio": "Atendimento voltado à reabilitação esportiva",
+  "sessionPrice": 150,
+  "city": "Marau",
+  "serviceMode": "IN_PERSON",
+  "experienceYears": 5
+}
+
+###
+GET {{baseUrl}}/physiotherapists
+Authorization: Bearer {{token}}
+
+### Buscar fisioterapeuta pelo id
+GET {{baseUrl}}/physiotherapists/1
+Authorization: Bearer {{token}}
