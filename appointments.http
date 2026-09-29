@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:3000/api
+@tokenPaciente = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoibWFyaWFAdGVzdGUuY29tIiwibmFtZSI6Ik1hcmlhIiwiaWF0IjoxNzkwNjQwNTEyLCJleHAiOjE3OTA3MjY5MTJ9.iHszcpxQBuhNfBJLYKhNZAjn_wzYt3rzL3xZGjqPDKM
+@tokenFisio = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTA2NDA1NDIsImV4cCI6MTc5MDcyNjk0Mn0.uGqfRK4MPMGPkKqzlUtlwTWzqEgl5xW-l4nB47FLOfI
+### Paciente agenda uma consulta
+POST {{baseUrl}}/appointments
+Authorization: Bearer {{tokenPaciente}}
+Content-Type: application/json
+
+{
+  "scheduleId": 2,
+  "reason": "Dor lombar há 2 semanas",
+  "painLevel": 7
+}
+
+### Paciente lista as próprias consultas
+GET {{baseUrl}}/appointments/me
+Authorization: Bearer {{tokenPaciente}}
+
+### Fisio lista só as agendadas
+GET {{baseUrl}}/appointments/me?status=SCHEDULED
+Authorization: Bearer {{tokenFisio}}

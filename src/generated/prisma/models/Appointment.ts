@@ -336,13 +336,13 @@ export type AppointmentOrderByWithRelationInput = {
 
 export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  scheduleId?: number
   rescheduledFromId?: number
   AND?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   OR?: Prisma.AppointmentWhereInput[]
   NOT?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   patientId?: Prisma.IntFilter<"Appointment"> | number
   physiotherapistId?: Prisma.IntFilter<"Appointment"> | number
+  scheduleId?: Prisma.IntFilter<"Appointment"> | number
   status?: Prisma.EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
   reason?: Prisma.StringNullableFilter<"Appointment"> | string | null
   price?: Prisma.FloatFilter<"Appointment"> | number
@@ -357,7 +357,7 @@ export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   rescheduledFrom?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
   rescheduledTo?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
-}, "id" | "scheduleId" | "rescheduledFromId">
+}, "id" | "rescheduledFromId">
 
 export type AppointmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -684,36 +684,46 @@ export type AppointmentUncheckedUpdateManyWithoutPhysiotherapistNestedInput = {
   deleteMany?: Prisma.AppointmentScalarWhereInput | Prisma.AppointmentScalarWhereInput[]
 }
 
-export type AppointmentCreateNestedOneWithoutScheduleInput = {
-  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
-  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput
-  connect?: Prisma.AppointmentWhereUniqueInput
+export type AppointmentCreateNestedManyWithoutScheduleInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput> | Prisma.AppointmentCreateWithoutScheduleInput[] | Prisma.AppointmentUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput | Prisma.AppointmentCreateOrConnectWithoutScheduleInput[]
+  createMany?: Prisma.AppointmentCreateManyScheduleInputEnvelope
+  connect?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
 }
 
-export type AppointmentUncheckedCreateNestedOneWithoutScheduleInput = {
-  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
-  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput
-  connect?: Prisma.AppointmentWhereUniqueInput
+export type AppointmentUncheckedCreateNestedManyWithoutScheduleInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput> | Prisma.AppointmentCreateWithoutScheduleInput[] | Prisma.AppointmentUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput | Prisma.AppointmentCreateOrConnectWithoutScheduleInput[]
+  createMany?: Prisma.AppointmentCreateManyScheduleInputEnvelope
+  connect?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
 }
 
-export type AppointmentUpdateOneWithoutScheduleNestedInput = {
-  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
-  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput
-  upsert?: Prisma.AppointmentUpsertWithoutScheduleInput
-  disconnect?: Prisma.AppointmentWhereInput | boolean
-  delete?: Prisma.AppointmentWhereInput | boolean
-  connect?: Prisma.AppointmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AppointmentUpdateToOneWithWhereWithoutScheduleInput, Prisma.AppointmentUpdateWithoutScheduleInput>, Prisma.AppointmentUncheckedUpdateWithoutScheduleInput>
+export type AppointmentUpdateManyWithoutScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput> | Prisma.AppointmentCreateWithoutScheduleInput[] | Prisma.AppointmentUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput | Prisma.AppointmentCreateOrConnectWithoutScheduleInput[]
+  upsert?: Prisma.AppointmentUpsertWithWhereUniqueWithoutScheduleInput | Prisma.AppointmentUpsertWithWhereUniqueWithoutScheduleInput[]
+  createMany?: Prisma.AppointmentCreateManyScheduleInputEnvelope
+  set?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  disconnect?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  delete?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  connect?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  update?: Prisma.AppointmentUpdateWithWhereUniqueWithoutScheduleInput | Prisma.AppointmentUpdateWithWhereUniqueWithoutScheduleInput[]
+  updateMany?: Prisma.AppointmentUpdateManyWithWhereWithoutScheduleInput | Prisma.AppointmentUpdateManyWithWhereWithoutScheduleInput[]
+  deleteMany?: Prisma.AppointmentScalarWhereInput | Prisma.AppointmentScalarWhereInput[]
 }
 
-export type AppointmentUncheckedUpdateOneWithoutScheduleNestedInput = {
-  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
-  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput
-  upsert?: Prisma.AppointmentUpsertWithoutScheduleInput
-  disconnect?: Prisma.AppointmentWhereInput | boolean
-  delete?: Prisma.AppointmentWhereInput | boolean
-  connect?: Prisma.AppointmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AppointmentUpdateToOneWithWhereWithoutScheduleInput, Prisma.AppointmentUpdateWithoutScheduleInput>, Prisma.AppointmentUncheckedUpdateWithoutScheduleInput>
+export type AppointmentUncheckedUpdateManyWithoutScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput> | Prisma.AppointmentCreateWithoutScheduleInput[] | Prisma.AppointmentUncheckedCreateWithoutScheduleInput[]
+  connectOrCreate?: Prisma.AppointmentCreateOrConnectWithoutScheduleInput | Prisma.AppointmentCreateOrConnectWithoutScheduleInput[]
+  upsert?: Prisma.AppointmentUpsertWithWhereUniqueWithoutScheduleInput | Prisma.AppointmentUpsertWithWhereUniqueWithoutScheduleInput[]
+  createMany?: Prisma.AppointmentCreateManyScheduleInputEnvelope
+  set?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  disconnect?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  delete?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  connect?: Prisma.AppointmentWhereUniqueInput | Prisma.AppointmentWhereUniqueInput[]
+  update?: Prisma.AppointmentUpdateWithWhereUniqueWithoutScheduleInput | Prisma.AppointmentUpdateWithWhereUniqueWithoutScheduleInput[]
+  updateMany?: Prisma.AppointmentUpdateManyWithWhereWithoutScheduleInput | Prisma.AppointmentUpdateManyWithWhereWithoutScheduleInput[]
+  deleteMany?: Prisma.AppointmentScalarWhereInput | Prisma.AppointmentScalarWhereInput[]
 }
 
 export type AppointmentCreateNestedOneWithoutRescheduledToInput = {
@@ -967,48 +977,24 @@ export type AppointmentCreateOrConnectWithoutScheduleInput = {
   create: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
 }
 
-export type AppointmentUpsertWithoutScheduleInput = {
-  update: Prisma.XOR<Prisma.AppointmentUpdateWithoutScheduleInput, Prisma.AppointmentUncheckedUpdateWithoutScheduleInput>
-  create: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
-  where?: Prisma.AppointmentWhereInput
+export type AppointmentCreateManyScheduleInputEnvelope = {
+  data: Prisma.AppointmentCreateManyScheduleInput | Prisma.AppointmentCreateManyScheduleInput[]
 }
 
-export type AppointmentUpdateToOneWithWhereWithoutScheduleInput = {
-  where?: Prisma.AppointmentWhereInput
+export type AppointmentUpsertWithWhereUniqueWithoutScheduleInput = {
+  where: Prisma.AppointmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.AppointmentUpdateWithoutScheduleInput, Prisma.AppointmentUncheckedUpdateWithoutScheduleInput>
+  create: Prisma.XOR<Prisma.AppointmentCreateWithoutScheduleInput, Prisma.AppointmentUncheckedCreateWithoutScheduleInput>
+}
+
+export type AppointmentUpdateWithWhereUniqueWithoutScheduleInput = {
+  where: Prisma.AppointmentWhereUniqueInput
   data: Prisma.XOR<Prisma.AppointmentUpdateWithoutScheduleInput, Prisma.AppointmentUncheckedUpdateWithoutScheduleInput>
 }
 
-export type AppointmentUpdateWithoutScheduleInput = {
-  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
-  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
-  physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
-  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
-  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
-  review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
-}
-
-export type AppointmentUncheckedUpdateWithoutScheduleInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  patientId?: Prisma.IntFieldUpdateOperationsInput | number
-  physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
-  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
-  review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
+export type AppointmentUpdateManyWithWhereWithoutScheduleInput = {
+  where: Prisma.AppointmentScalarWhereInput
+  data: Prisma.XOR<Prisma.AppointmentUpdateManyMutationInput, Prisma.AppointmentUncheckedUpdateManyWithoutScheduleInput>
 }
 
 export type AppointmentCreateWithoutRescheduledToInput = {
@@ -1372,6 +1358,69 @@ export type AppointmentUncheckedUpdateManyWithoutPhysiotherapistInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
   scheduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AppointmentCreateManyScheduleInput = {
+  id?: number
+  patientId: number
+  physiotherapistId: number
+  status?: $Enums.AppointmentStatus
+  reason?: string | null
+  price: number
+  painLevel?: number | null
+  sessionNotes?: string | null
+  cancelledBy?: $Enums.CancellationActor | null
+  cancelReason?: string | null
+  rescheduledFromId?: number | null
+  createdAt?: Date | string
+}
+
+export type AppointmentUpdateWithoutScheduleInput = {
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.ProfileUpdateOneRequiredWithoutAppointmentsNestedInput
+  physiotherapist?: Prisma.PhysiotherapistUpdateOneRequiredWithoutAppointmentsNestedInput
+  rescheduledFrom?: Prisma.AppointmentUpdateOneWithoutRescheduledToNestedInput
+  rescheduledTo?: Prisma.AppointmentUpdateOneWithoutRescheduledFromNestedInput
+  review?: Prisma.ReviewUpdateOneWithoutAppointmentNestedInput
+}
+
+export type AppointmentUncheckedUpdateWithoutScheduleInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  painLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sessionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cancelledBy?: Prisma.NullableEnumCancellationActorFieldUpdateOperationsInput | $Enums.CancellationActor | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rescheduledFromId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rescheduledTo?: Prisma.AppointmentUncheckedUpdateOneWithoutRescheduledFromNestedInput
+  review?: Prisma.ReviewUncheckedUpdateOneWithoutAppointmentNestedInput
+}
+
+export type AppointmentUncheckedUpdateManyWithoutScheduleInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  physiotherapistId?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
