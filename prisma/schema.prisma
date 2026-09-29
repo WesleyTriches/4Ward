@@ -107,7 +107,7 @@ model Schedule {
 
   physiotherapist Physiotherapist @relation(fields: [physiotherapistId], references: [id], onDelete: Cascade)
 
-  appointment Appointment?
+  appointment Appointment[]
 
   @@unique([physiotherapistId, dateTime])
 }
@@ -118,7 +118,7 @@ model Appointment {
   id                Int               @id @default(autoincrement())
   patientId         Int
   physiotherapistId Int
-  scheduleId        Int               @unique
+  scheduleId        Int               
   status            AppointmentStatus @default(SCHEDULED)
 
   reason       String?
