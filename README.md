@@ -1,107 +1,164 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 4Ward: API de Gestão de Consultas para Fisioterapeutas
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API criada para um aplicativo que conecta pacientes e fisioterapeutas. A pessoa cadastra um perfil com a possibilidade de ser fisioterapeuta/paciente. O fisioterapeuta cria o perfil profissional e os horários disponíveis. O paciente encontra um profissional, agenda uma consulta e pode cancelar ou remarcar. Depois do atendimento, o fisioterapeuta registra se a consulta foi realizada ou se o paciente faltou.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Projeto desenvolvido por Alberto Neto, Gabriel Trentini e Wesley Triches
+## Como rodar o projeto
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+### 1. Clonar o repositório
 
 ```bash
-$ npm install
+git clone https://github.com/WesleyTriches/4Ward.git
+cd 4Ward
 ```
 
-## Compile and run the project
+### 2. Instalar as dependências
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 3. Criar o arquivo .env
+
+O arquivo .env guarda as configurações sensíveis do projeto e não é enviado para o GitHub. Por isso, cada pessoa que clonar o repositório precisa criar o seu.
+
+Crie um arquivo chamado .env na raiz do projeto com este conteúdo:
+
+```env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="troque-por-uma-frase-secreta-grande"
+```
+A frase pode ser qualquer uma, mas troque pois se não definido, a API usa um valor padrão de desenvolvimento.
+
+### 4. Criar o banco de dados
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma migrate dev
+npx prisma generate
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 5. Iniciar a API
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+A API sobe em http://localhost:3000/api e reinicia sozinha a cada arquivo salvo.
+## Autenticação
 
-## Resources
+Todas as rotas exigem um token, exceto POST /auth/register e POST /auth/login.
 
-Check out a few resources that may come in handy when working with NestJS:
+1. Faça login (send request). A resposta traz um access_token.
+2. Envie o token no cabeçalho de todas as outras requisições:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+O token vale por 1 dia. Depois disso, a API responde 401 Token inválido ou expirado e é preciso fazer login de novo.
 
 
-Padrao de commit S2 <3 
-feat    Nova funcionalidade    feat: adiciona agendamento de consulta
-fix    Correção de erro    fix: corrige validação de email
-refactor    Alteração no código sem mudar funcionalidade    refactor: reorganiza service de usuários
-chore
-Configurações, dependências ou tarefas auxiliares
-chore: atualiza dependências do projeto.
+
+## Fluxo básico
+
+### Fisioterapeuta
+1)  Ele registra como PHYSIOTHERAPIST;
+2) Gera um token;
+3) Cria um profile;
+4) Cria um perfil profinsional (physiotherapists);
+5) Cadastra os horários;
+6) Se precisar cancelar/remarcar, a qualquer momento antes da consulta;
+7) Ele vê a agenda;
+8) Depois do atendimento ele coloca complete ou no-show.
+
+### Paciente
+1) Ele registra como PATIENT;
+2) Gera um token;
+3) Cria um profile;
+4) Escolhe um fisioterapeuta;
+5) Olha os horários livres do fisio escolhido;
+6) Marca um horário que vira uma consulta;
+7) Consegue ver os seus horários marcados.
+8) Se precisar cancelar/remarcar, com pelo menos 24h de antecedência.
+
+## Rotas
+
+Todas as rotas começam com /api.
+Apenas as rotas de autenticação são públicas. Todas as outras exigem o token no cabeçalho:
+Authorization Bearer: <access_token>
+
+### Autenticação
+
+- POST /auth/register: cria um usuário e devolve o token.
+- POST /auth/login: faz login e devolve o token.
+
+### Usuários
+
+- PUT /users/:id: atualiza o nome e o email do usuário.
+- DELETE /users/:id: remove o usuário.
+
+### Perfis
+
+- POST /profiles: cria o perfil do usuário logado.
+- GET /profiles/me: mostra o perfil do usuário logado.
+- PUT /profiles/me: atualiza o perfil do usuário logado.
+
+### Especialidades
+
+- POST /specialties: cria uma especialidade.
+- GET /specialties: lista todas as especialidades.
+- GET /specialties/:id: mostra uma especialidade.
+- PUT /specialties/:id: atualiza uma especialidade.
+- DELETE /specialties/:id: remove uma especialidade.
+
+### Fisioterapeutas
+
+- POST /physiotherapists: cria o perfil profissional do usuário logado. Usada pelo fisioterapeuta.
+- GET /physiotherapists: lista os fisioterapeutas.
+- GET /physiotherapists/:id: mostra um fisioterapeuta.
+
+### Horários
+
+- POST /schedules: cadastra um horário disponível. Usada pelo fisioterapeuta.
+- GET /schedules?physiotherapistId=X: lista os horários livres de um fisioterapeuta.
+
+### Consultas
+
+- POST /appointments: agenda uma consulta em um horário livre. Usada pelo paciente.
+- GET /appointments/me: lista as consultas do usuário logado. O paciente vê as dele e o fisioterapeuta vê as dos seus pacientes.
+- GET /appointments/me?status=X: igual à anterior, filtrando pelo status (SCHEDULED, COMPLETED, CANCELLED ou NO_SHOW).
+- GET /appointments/:id: mostra uma consulta. Só o paciente e o fisioterapeuta da consulta têm acesso.
+- PATCH /appointments/:id/cancel: cancela a consulta. Exige o campo cancelReason. Pode ser usada pelo paciente ou pelo fisioterapeuta da consulta.
+- POST /appointments/:id/reschedule: remarca a consulta para outro horário do mesmo fisioterapeuta. Exige o campo newScheduleId. Pode ser usada pelo paciente ou pelo fisioterapeuta da consulta.
+- PATCH /appointments/:id/complete: marca a consulta como realizada. Aceita o campo sessionNotes. Usada pelo fisioterapeuta da consulta.
+- PATCH /appointments/:id/no-show: marca a falta do paciente. Usada pelo fisioterapeuta da consulta.
+## Regras de negócio das consultas
+
+### Estados
+
+Uma consulta começa como SCHEDULED (agendada) e pode ir para um dos três estados finais:
+
+- SCHEDULED (agendada): estado inicial, quando o paciente agenda a consulta.
+- CANCELLED (cancelada): definido pelo paciente ou pelo fisioterapeuta.
+- COMPLETED (realizada): definido pelo fisioterapeuta, depois do horário da consulta.
+- NO_SHOW (falta): definido pelo fisioterapeuta, depois do horário da consulta.
+
+Consultas em estado final não podem mais ser alteradas.
+
+### Regras
+
+- Só pacientes agendam consultas.
+- Um horário tem no máximo uma consulta ativa. Ao agendar, o horário fica indisponível; ao cancelar ou remarcar, volta a ficar disponível para outros pacientes. A verificação e a ocupação do horário acontecem em uma única transação, o que impede que dois pacientes agendem o mesmo horário ao mesmo tempo.
+- O paciente não pode ter duas consultas no mesmo horário, mesmo com fisioterapeutas diferentes.
+- Não é possível agendar horários que já passaram.
+- O preço é registrado no momento do agendamento. Se o fisioterapeuta mudar o valor da sessão depois, as consultas já marcadas mantêm o valor combinado.
+- Cada usuário só vê as próprias consultas: o paciente vê as dele, e o fisioterapeuta vê as dos seus pacientes. Tentar acessar a consulta de outra pessoa retorna 403.
+- O paciente só pode cancelar ou remarcar com pelo menos 24 horas de antecedência. O fisioterapeuta pode cancelar a qualquer momento.
+- Consultas que já começaram não podem ser canceladas nem remarcadas: o fisioterapeuta deve marcá-las como realizadas ou falta.
+- Realizada e falta só podem ser marcadas pelo fisioterapeuta da consulta, depois do horário.
+- Remarcar cancela a consulta atual e cria uma nova, ligada à anterior pelo campo rescheduledFromId. O novo horário precisa ser do mesmo fisioterapeuta.
+
+### Por que um horário pode ter várias consultas no banco?
+
+Antes, o modelo tinha appointment Appointment? no Schedule (uma ou nenhuma consulta por horário), e o scheduleId do Appointment era @unique. Com isso, um horário só podia aparecer em uma consulta para sempre. Se a Maria cancelasse a consulta das 17h, o João não conseguiria agendar nesse horário, mesmo com available = true, porque o scheduleId já estava sendo usado na consulta cancelada.
+
+Agora a relação é 1:N (appointments Appointment[]) e o scheduleId não é mais único. Isso permite guardar o histórico: a consulta cancelada continua registrada com o motivo do cancelamento, e o horário pode receber uma nova consulta. Na regra de negócio, porém, o horário continua tendo no máximo uma consulta ativa por vez, garantido pelo campo available.
+
+## Diagrama ER do projeto
+![Diagrama ER do projeto](docs/diagrama-er.jpeg)
