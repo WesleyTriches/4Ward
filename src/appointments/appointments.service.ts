@@ -17,6 +17,7 @@ import {
   UserRole,
 } from 'src/generated/prisma/enums';
 
+const MIN_HOURS_TO_CANCEL = 24;
 const appointmentInclude = {
   schedule: true,
   patient: true,
@@ -30,7 +31,7 @@ const appointmentInclude = {
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(userId: number, dto: CreateAppointmentDto) {
     const profile = await this.getProfile(userId);
@@ -116,7 +117,9 @@ export class AppointmentsService {
         'Não é possível cancelar uma consulta que já começou. Marque como realizada ou falta.',
       );
     }
-
+    if (actor === CancellationActor.PATIENT) {
+      this.ensureCancelDeadline(appointment.schedule.dateTime);
+    }
     return this.prisma.$transaction(async (tx) => {
       //libera o horário para outro paciente
       await tx.schedule.update({
@@ -173,7 +176,9 @@ export class AppointmentsService {
         'Não é possível remarcar uma consulta que já começou.',
       );
     }
-
+     if (actor === CancellationActor.PATIENT) {
+      this.ensureCancelDeadline(appointment.schedule.dateTime);
+    }
     const newSchedule = await this.prisma.schedule.findUnique({
       where: { id: dto.newScheduleId },
     });
@@ -321,6 +326,18 @@ export class AppointmentsService {
     if (status !== AppointmentStatus.SCHEDULED) {
       throw new BadRequestException(
         `Consulta com status ${status} não pode ser alterada.`,
+      );
+    }
+  }
+
+  //paciente só cancela ou remarca com antecedência mínima
+  private ensureCancelDeadline(dateTime: Date) {
+    const horasRestantes =
+      (dateTime.getTime() - Date.now()) / (1000 * 60 * 60);//data da consulta - o momento atual
+
+    if (horasRestantes < MIN_HOURS_TO_CANCEL) {
+      throw new BadRequestException(
+        `Cancelamentos e remarcações só podem ser feitos com ${MIN_HOURS_TO_CANCEL}h de antecedência. Fale com o fisioterapeuta.`,
       );
     }
   }
