@@ -3,6 +3,7 @@
 API criada para um aplicativo que conecta pacientes e fisioterapeutas. A pessoa cadastra um perfil com a possibilidade de ser fisioterapeuta/paciente. O fisioterapeuta cria o perfil profissional e os horários disponíveis. O paciente encontra um profissional, agenda uma consulta e pode cancelar ou remarcar. Depois do atendimento, o fisioterapeuta registra se a consulta foi realizada ou se o paciente faltou.
 
 Projeto desenvolvido por Alberto Neto, Gabriel Trentini e Wesley Triches
+
 ## Como rodar o projeto
 
 ### 1. Clonar o repositório
@@ -61,7 +62,7 @@ O token vale por 1 dia. Depois disso, a API responde 401 Token inválido ou expi
 1)  Ele registra como PHYSIOTHERAPIST;
 2) Gera um token;
 3) Cria um profile;
-4) Cria um perfil profinsional (physiotherapists);
+4) Cria um perfil profissional (physiotherapists);
 5) Cadastra os horários;
 6) Se precisar cancelar/remarcar, a qualquer momento antes da consulta;
 7) Ele vê a agenda;
@@ -161,4 +162,4 @@ Antes, o modelo tinha appointment Appointment? no Schedule (uma ou nenhuma consu
 Agora a relação é 1:N (appointments Appointment[]) e o scheduleId não é mais único. Isso permite guardar o histórico: a consulta cancelada continua registrada com o motivo do cancelamento, e o horário pode receber uma nova consulta. Na regra de negócio, porém, o horário continua tendo no máximo uma consulta ativa por vez, garantido pelo campo available.
 
 ## Diagrama ER do projeto
-![Diagrama ER do projeto](docs/diagrama-er.jpeg)
+![Diagrama ER do projeto](docs/diagrama-er.png)
