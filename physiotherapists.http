@@ -1,24 +1,34 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc5MTA3MzI4MiwiZXhwIjoxNzkxMTU5NjgyfQ.h9KRxs5F5bAksR4qB6IzgewAZy5szZ1aOzjQGwZW-ZU
 
-POST {{baseUrl}}/physiotherapists
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "specialtyId": 1,
-  "crefito": "123456-F",
-  "bio": "Atendimento voltado à reabilitação esportiva",
-  "sessionPrice": 150,
-  "city": "Marau",
-  "serviceMode": "IN_PERSON",
-  "experienceYears": 5
-}
-
-###
+### Todos os fisioterapeutas
 GET {{baseUrl}}/physiotherapists
 Authorization: Bearer {{token}}
 
 ### Buscar fisioterapeuta pelo id
 GET {{baseUrl}}/physiotherapists/1
+Authorization: Bearer {{token}}
+
+### Filtrar por cidade
+GET {{baseUrl}}/physiotherapists?city=Marau
+Authorization: Bearer {{token}}
+
+### Filtrar por especialidade
+GET {{baseUrl}}/physiotherapists?specialtyId=1
+Authorization: Bearer {{token}}
+
+### Filtrar por modalidade
+GET {{baseUrl}}/physiotherapists?serviceMode=IN_PERSON
+Authorization: Bearer {{token}}
+
+### Cidade + especialidade
+GET {{baseUrl}}/physiotherapists?city=Marau&specialtyId=1
+Authorization: Bearer {{token}}
+
+### Cidade + modalidade
+GET {{baseUrl}}/physiotherapists?city=Marau&serviceMode=ONLINE
+Authorization: Bearer {{token}}
+
+### Todos os filtros juntos
+GET {{baseUrl}}/physiotherapists?city=Marau&specialtyId=1&serviceMode=BOTH
 Authorization: Bearer {{token}}
