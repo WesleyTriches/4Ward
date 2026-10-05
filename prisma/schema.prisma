@@ -59,7 +59,7 @@ model Profile {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
 
   physiotherapist Physiotherapist?
   appointments    Appointment[]
@@ -90,7 +90,7 @@ model Physiotherapist {
   experienceYears Int
   rating          Float?
 
-  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   Profile   @relation(fields: [profileId], references: [id])
   specialty Specialty @relation(fields: [specialtyId], references: [id])
 
   schedules    Schedule[]
@@ -105,7 +105,7 @@ model Schedule {
   dateTime          DateTime
   available         Boolean  @default(true)
 
-  physiotherapist Physiotherapist @relation(fields: [physiotherapistId], references: [id], onDelete: Cascade)
+  physiotherapist Physiotherapist @relation(fields: [physiotherapistId], references: [id])
 
   appointment Appointment[]
 
@@ -118,7 +118,7 @@ model Appointment {
   id                Int               @id @default(autoincrement())
   patientId         Int
   physiotherapistId Int
-  scheduleId        Int               
+  scheduleId        Int
   status            AppointmentStatus @default(SCHEDULED)
 
   reason       String?
@@ -152,5 +152,5 @@ model Review {
   comment       String?
   createdAt     DateTime @default(now())
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
 }
