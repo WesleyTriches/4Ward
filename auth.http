@@ -1,28 +1,17 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsInJvbGUiOiJQQVRJRU5UIiwiaWF0IjoxNzkxMjM3MDcwLCJleHAiOjE3OTEzMjM0NzB9.rql9MNUTfNqRi3hfIEqef61ebjHfeo9BIDEErSZxAIs
 
-
+### Login usuário existente
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-"email": "usuario@upf.br",
-"password": "abc123"
+  "email": "usuario@upf.br",
+  "password": "abc123"
 }
 
-###
+### Registrar fisioterapeuta
 POST {{baseUrl}}/auth/register
-Content-Type: application/json
-
-{
-"name": "usuario",
-"email": "usuario@upf.br",
-"passwordHash": "abc123"
-}
-
-###
-POST {{baseUrl}}/auth/register
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -32,16 +21,16 @@ Content-Type: application/json
   "role": "PHYSIOTHERAPIST"
 }
 
-###
+### Login fisioterapeuta
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-"email": "joao@email.com",
-"password": "123456"
+  "email": "joao@email.com",
+  "password": "123456"
 }
 
-###
+### Registrar paciente
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -52,41 +41,39 @@ Content-Type: application/json
   "role": "PATIENT"
 }
 
-###
+### Login paciente
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-"email": "maria@teste.com",
-"password": "123456"
+  "email": "maria@teste.com",
+  "password": "123456"
 }
 
-###
+### Registrar usuário com role padrão PATIENT
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "name": "testee",
+  "name": "Teste",
   "email": "teste@teste.com",
   "password": "123456"
 }
 
-###
-POST {{baseUrl}}/login
+### Login usuário teste
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-"email": "teste@teste.com",
-"password": "123456"
-}
-
-###
-POST {{baseUrl}}/auth/register
-Content-Type: application/json
-
-{
-  "name": "testew",
-  "email": "testew@teste.com",
+  "email": "teste@teste.com",
   "password": "123456"
 }
 
+### Reativar conta
+POST {{baseUrl}}/auth/reactivate
+Content-Type: application/json
+
+{
+  "email": "outroemail@upf.br",
+  "password": "abc123"
+}

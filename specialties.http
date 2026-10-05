@@ -1,8 +1,10 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
+@token = SEU_TOKEN_AQUI
 
+### Criar especialidade - fisioterapeuta
 POST {{baseUrl}}/specialties
 Authorization: Bearer {{token}}
+Content-Type: application/json
 
 {
   "name": "teste",
@@ -10,6 +12,6 @@ Authorization: Bearer {{token}}
   "icon": "sports"
 }
 
-###
-GET http://localhost:3000/api/specialties
+### Listar especialidades
+GET {{baseUrl}}/specialties
 Authorization: Bearer {{token}}

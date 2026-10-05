@@ -2,33 +2,33 @@
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc5MTE2MDc5NywiZXhwIjoxNzkxMjQ3MTk3fQ.hnxT_9tPPpRAcxEntNAb9aymnkah3WN5SfF_4gZ57kc
 
 ### Todos
-GET http://localhost:3000/api/physiotherapists
+GET {{baseUrl}}/physiotherapists
 Authorization: Bearer {{token}}
 
 ### Cidade
-GET http://localhost:3000/api/physiotherapists?city=Marau
+GET {{baseUrl}}/physiotherapists?city=Marau
 Authorization: Bearer {{token}}
 
 ### Especialidade
-GET http://localhost:3000/api/physiotherapists?specialtyId=1
+GET {{baseUrl}}/physiotherapists?specialtyId=1
 Authorization: Bearer {{token}}
 
 ### Presencial
-GET http://localhost:3000/api/physiotherapists?serviceMode=IN_PERSON
+GET {{baseUrl}}/physiotherapists?serviceMode=IN_PERSON
 Authorization: Bearer {{token}}
 
 ### Online
-GET http://localhost:3000/api/physiotherapists?serviceMode=ONLINE
+GET {{baseUrl}}/physiotherapists?serviceMode=ONLINE
 Authorization: Bearer {{token}}
 
 ### Todos os filtros
-GET http://localhost:3000/api/physiotherapists?city=Marau&specialtyId=1&serviceMode=IN_PERSON
+GET {{baseUrl}}/physiotherapists?city=Marau&specialtyId=1&serviceMode=IN_PERSON
 Authorization: Bearer {{token}}
 
 ### Deve dar 400
-GET http://localhost:3000/api/physiotherapists?specialtyId=abc
+GET {{baseUrl}}/physiotherapists?specialtyId=abc
 Authorization: Bearer {{token}}
 
 ### Deve dar 400
-GET http://localhost:3000/api/physiotherapists?serviceMode=TESTE
+GET {{baseUrl}}/physiotherapists?serviceMode=TESTE
 Authorization: Bearer {{token}}
