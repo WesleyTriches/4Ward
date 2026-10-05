@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseEnumPipe,
   ParseIntPipe,
   Post,
   Query,
@@ -32,22 +33,36 @@ export class PhysiotherapistsController {
 
   @Get()
   async findAll(
-    @Query('city') city?: string,
-    @Query('specialtyId') specialtyId?: string,
-    @Query('serviceMode') serviceMode?: ServiceMode,
+    @Query('city')
+    city?: string,
+
+    @Query(
+      'specialtyId',
+      new ParseIntPipe({
+        optional: true,
+      }),
+    )
+    specialtyId?: number,
+
+    @Query(
+      'serviceMode',
+      new ParseEnumPipe(ServiceMode, {
+        optional: true,
+      }),
+    )
+    serviceMode?: ServiceMode,
   ) {
     return this.physiotherapistsService.findAll({
       city,
-      specialtyId: specialtyId
-        ? Number(specialtyId)
-        : undefined,
+      specialtyId,
       serviceMode,
     });
   }
 
   @Get(':id')
   async findOne(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe)
+    id: number,
   ) {
     return this.physiotherapistsService.findOne(id);
   }

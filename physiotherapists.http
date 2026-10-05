@@ -1,34 +1,34 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc5MTA3MzI4MiwiZXhwIjoxNzkxMTU5NjgyfQ.h9KRxs5F5bAksR4qB6IzgewAZy5szZ1aOzjQGwZW-ZU
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc5MTE2MDc5NywiZXhwIjoxNzkxMjQ3MTk3fQ.hnxT_9tPPpRAcxEntNAb9aymnkah3WN5SfF_4gZ57kc
 
-### Todos os fisioterapeutas
-GET {{baseUrl}}/physiotherapists
+### Todos
+GET http://localhost:3000/api/physiotherapists
 Authorization: Bearer {{token}}
 
-### Buscar fisioterapeuta pelo id
-GET {{baseUrl}}/physiotherapists/1
+### Cidade
+GET http://localhost:3000/api/physiotherapists?city=Marau
 Authorization: Bearer {{token}}
 
-### Filtrar por cidade
-GET {{baseUrl}}/physiotherapists?city=Marau
+### Especialidade
+GET http://localhost:3000/api/physiotherapists?specialtyId=1
 Authorization: Bearer {{token}}
 
-### Filtrar por especialidade
-GET {{baseUrl}}/physiotherapists?specialtyId=1
+### Presencial
+GET http://localhost:3000/api/physiotherapists?serviceMode=IN_PERSON
 Authorization: Bearer {{token}}
 
-### Filtrar por modalidade
-GET {{baseUrl}}/physiotherapists?serviceMode=IN_PERSON
+### Online
+GET http://localhost:3000/api/physiotherapists?serviceMode=ONLINE
 Authorization: Bearer {{token}}
 
-### Cidade + especialidade
-GET {{baseUrl}}/physiotherapists?city=Marau&specialtyId=1
+### Todos os filtros
+GET http://localhost:3000/api/physiotherapists?city=Marau&specialtyId=1&serviceMode=IN_PERSON
 Authorization: Bearer {{token}}
 
-### Cidade + modalidade
-GET {{baseUrl}}/physiotherapists?city=Marau&serviceMode=ONLINE
+### Deve dar 400
+GET http://localhost:3000/api/physiotherapists?specialtyId=abc
 Authorization: Bearer {{token}}
 
-### Todos os filtros juntos
-GET {{baseUrl}}/physiotherapists?city=Marau&specialtyId=1&serviceMode=BOTH
+### Deve dar 400
+GET http://localhost:3000/api/physiotherapists?serviceMode=TESTE
 Authorization: Bearer {{token}}

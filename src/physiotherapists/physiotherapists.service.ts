@@ -7,28 +7,43 @@ import {
 
 import { PrismaService } from 'src/database/prisma.service';
 import { CreatePhysiotherapistDto } from 'src/dtos/create-physiotherapist-dto';
-import { ServiceMode } from 'src/generated/prisma/enums';
+
+import {
+  ServiceMode,
+  UserRole,
+} from 'src/generated/prisma/enums';
 
 @Injectable()
 export class PhysiotherapistsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+  ) {}
 
-  async create(userId: number, dto: CreatePhysiotherapistDto) {
-    const profile = await this.prisma.profile.findUnique({
-      where: {
-        userId: userId,
-      },
-      include: {
-        user: true,
-        physiotherapist: true,
-      },
-    });
+  async create(
+    userId: number,
+    dto: CreatePhysiotherapistDto,
+  ) {
+    const profile =
+      await this.prisma.profile.findUnique({
+        where: {
+          userId,
+        },
+        include: {
+          user: true,
+          physiotherapist: true,
+        },
+      });
 
     if (!profile) {
-      throw new NotFoundException('Perfil não encontrado.');
+      throw new NotFoundException(
+        'Perfil não encontrado.',
+      );
     }
 
-    if (profile.user.role !== 'PHYSIOTHERAPIST') {
+    if (
+      profile.user.role !==
+      UserRole.PHYSIOTHERAPIST
+    ) {
       throw new ForbiddenException(
         'Apenas fisioterapeutas podem criar um perfil profissional.',
       );
@@ -40,24 +55,30 @@ export class PhysiotherapistsService {
       );
     }
 
-    const specialty = await this.prisma.specialty.findUnique({
-      where: {
-        id: dto.specialtyId,
-      },
-    });
+    const specialty =
+      await this.prisma.specialty.findUnique({
+        where: {
+          id: dto.specialtyId,
+        },
+      });
 
     if (!specialty) {
-      throw new NotFoundException('Especialidade não encontrada.');
+      throw new NotFoundException(
+        'Especialidade não encontrada.',
+      );
     }
 
-    const crefitoExists = await this.prisma.physiotherapist.findUnique({
-      where: {
-        crefito: dto.crefito,
-      },
-    });
+    const crefitoExists =
+      await this.prisma.physiotherapist.findUnique({
+        where: {
+          crefito: dto.crefito,
+        },
+      });
 
     if (crefitoExists) {
-      throw new ConflictException('CREFITO já cadastrado.');
+      throw new ConflictException(
+        'CREFITO já cadastrado.',
+      );
     }
 
     return this.prisma.physiotherapist.create({
@@ -71,6 +92,7 @@ export class PhysiotherapistsService {
         serviceMode: dto.serviceMode,
         experienceYears: dto.experienceYears,
       },
+
       include: {
         specialty: true,
         profile: true,
@@ -95,7 +117,17 @@ export class PhysiotherapistsService {
 
         specialtyId: filters.specialtyId,
 
-        serviceMode: filters.serviceMode,
+        serviceMode:
+          filters.serviceMode === undefined
+            ? undefined
+            : filters.serviceMode === ServiceMode.BOTH
+              ? ServiceMode.BOTH
+              : {
+                  in: [
+                    filters.serviceMode,
+                    ServiceMode.BOTH,
+                  ],
+                },
       },
 
       include: {
@@ -111,6 +143,7 @@ export class PhysiotherapistsService {
         where: {
           id,
         },
+
         include: {
           specialty: true,
           profile: true,

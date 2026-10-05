@@ -1,6 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTA2MjQ3NTEsImV4cCI6MTc5MDcxMTE1MX0.mDbCB2jCZ_fpn-CWx9Xl71rz4Cvy2Xjm1ZEBTqwZvuI
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTExNjEyMDMsImV4cCI6MTc5MTI0NzYwM30.FYmDWJ6kr07ETP5YQhPuN9xMqn_UYT6cl2hfBkUQtO8
 
 ### Criar horário disponível
 POST {{baseUrl}}/schedules
@@ -15,4 +14,22 @@ Content-Type: application/json
 GET {{baseUrl}}/schedules?physiotherapistId=1
 Authorization: Bearer {{token}}
 
+### Buscar horários disponíveis por data
+GET {{baseUrl}}/schedules?physiotherapistId=1&date=2026-10-25
+Authorization: Bearer {{token}}
 
+### Buscar minha agenda por data
+GET {{baseUrl}}/schedules/me?date=2026-10-25
+Authorization: Bearer {{token}}
+
+### Buscar minha agenda sem filtro de data
+GET {{baseUrl}}/schedules/me
+Authorization: Bearer {{token}}
+
+### Buscar agenda de um dia passado
+GET {{baseUrl}}/schedules/me?date=2026-10-01
+Authorization: Bearer {{token}}
+
+### Testar data inválida
+GET {{baseUrl}}/schedules/me?date=abc
+Authorization: Bearer {{token}}
