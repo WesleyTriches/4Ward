@@ -92,26 +92,4 @@ export class SpecialtiesService {
     });
   }
 
-  async delete(id: number) {
-    await this.findOne(id);
-
-    const physiotherapistsCount =
-      await this.prisma.physiotherapist.count({
-        where: {
-          specialtyId: id,
-        },
-      });
-
-    if (physiotherapistsCount > 0) {
-      throw new BadRequestException(
-        'Não é possível excluir uma especialidade vinculada a fisioterapeutas',
-      );
-    }
-
-    return this.prisma.specialty.delete({
-      where: {
-        id,
-      },
-    });
-  }
 }
