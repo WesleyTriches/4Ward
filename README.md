@@ -761,10 +761,6 @@ Representa um horário criado por um fisioterapeuta.
 
 Representa uma consulta entre um paciente e um fisioterapeuta.
 
-### Review
-
-Entidade destinada à avaliação de uma consulta.
-
 ## Enums
 
 ### UserRole
