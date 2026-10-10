@@ -14,7 +14,7 @@ import { UserRole } from 'src/generated/prisma/enums';
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-  ) {}
+  ) { }
 
   async createUser(dto: CreateUserDTO) {
     const userExists =
@@ -41,6 +41,11 @@ export class UsersService {
         email: dto.email,
         passwordHash,
         role: dto.role ?? UserRole.PATIENT,
+        profile: {
+          create: {
+            fullName: dto.name,
+          },
+        },
       },
     });
   }
