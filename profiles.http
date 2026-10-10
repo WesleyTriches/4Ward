@@ -1,62 +1,21 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiam9hb0BlbWFpbC5jb20iLCJuYW1lIjoiSm_Do28iLCJpYXQiOjE3OTAyMDQyMzgsImV4cCI6MTc5MDI5MDYzOH0.bOqg50uKEcvkBtVaqdi2XeJk3SZfwp4bck63cpK3yhM
+# Cole aqui o access_token devolvido por /auth/register ou /auth/login
+@token = COLE_AQUI_O_TOKEN
 
-POST {{baseUrl}}/profiles
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-"userId": 1,
-"fullName": "Profile do Joaozinho",
-"birthDate": "1990-01-15T00:00:00Z",
-"avatarUrl": "pudim.com"
-}
+# O Profile é criado automaticamente em POST /auth/register.
+# Não existe mais POST /profiles.
 
 ### Buscar meu perfil
 GET {{baseUrl}}/profiles/me
 Authorization: Bearer {{token}}
 
-
-{
-"fullName": "Joazão",
-"birthDate": "1990-01-15T00:00:00Z",
-"avatarUrl": "pudim.com"
-}
-
-###
-POST {{baseUrl}}/profiles
-Authorization: Bearer {{token}}
-
 ### Atualizar meu perfil
-PUT http://localhost:3000/api/profiles/me
-Authorization: Bearer TOKEN_DO_USUARIO
-Content-Type: application/json
-
-{
-  "fullName": "João Silva"
-}
-
-{
-  "userId": 3,
-  "fullName": "João da Silva",
-  "phone": "54999999999"
-}
-
-###
-POST {{baseUrl}}/profiles
-Authorization: Bearer {{token}}
-
-{
-  "userId": 5,
-  "fullName": "Maria da Silva"
-}
-
-###
-POST {{baseUrl}}/profiles
+PUT {{baseUrl}}/profiles/me
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "userId": 7,
-  "fullName": "testew"
+  "fullName": "João Silva",
+  "birthDate": "1990-01-15T00:00:00Z",
+  "avatarUrl": "https://exemplo.com/avatar.png"
 }
