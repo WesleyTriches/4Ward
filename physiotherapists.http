@@ -1,9 +1,23 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsImlhdCI6MTc5MTE2MDc5NywiZXhwIjoxNzkxMjQ3MTk3fQ.hnxT_9tPPpRAcxEntNAb9aymnkah3WN5SfF_4gZ57kc
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjgsImVtYWlsIjoicGF1bG9AZmlzaW8uY29tIiwibmFtZSI6IlBhdWxvIiwicm9sZSI6IlBIWVNJT1RIRVJBUElTVCIsImlhdCI6MTc5MTY3OTUxMywiZXhwIjoxNzkxNzY1OTEzfQ.gf_3I-oajVaga4EkjBcRgEFZ3WsUbgpNW2XcdD976ak
 ### Todos
 GET {{baseUrl}}/physiotherapists
 Authorization: Bearer {{token}}
+
+###
+POST {{baseUrl}}/physiotherapists
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "specialtyId": 3,
+  "crefito": "321456-F",
+  "bio": "Atendimento voltado a ergonomia",
+  "sessionPrice": 150,
+  "city": "Marau",
+  "serviceMode": "IN_PERSON",
+  "experienceYears": 5
+}
 
 ### Cidade
 GET {{baseUrl}}/physiotherapists?city=Marau
@@ -32,3 +46,4 @@ Authorization: Bearer {{token}}
 ### Deve dar 400
 GET {{baseUrl}}/physiotherapists?serviceMode=TESTE
 Authorization: Bearer {{token}}
+

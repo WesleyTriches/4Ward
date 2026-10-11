@@ -1,7 +1,6 @@
 @baseUrl = http://localhost:3000/api
 # Cole aqui o access_token devolvido por /auth/register ou /auth/login
-@token = COLE_AQUI_O_TOKEN
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjgsImVtYWlsIjoicGF1bG9AZmlzaW8uY29tIiwibmFtZSI6IlBhdWxvIiwicm9sZSI6IlBIWVNJT1RIRVJBUElTVCIsImlhdCI6MTc5MTY3OTUxMywiZXhwIjoxNzkxNzY1OTEzfQ.gf_3I-oajVaga4EkjBcRgEFZ3WsUbgpNW2XcdD976ak
 # O Profile é criado automaticamente em POST /auth/register.
 # Não existe mais POST /profiles.
 
@@ -15,7 +14,6 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "fullName": "João Silva",
-  "birthDate": "1990-01-15T00:00:00Z",
-  "avatarUrl": "https://exemplo.com/avatar.png"
+  "fullName": "Paulo Silva Junior",
+  "birthDate": "2000-01-15T00:00:00Z"
 }

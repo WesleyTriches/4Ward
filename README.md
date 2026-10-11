@@ -1,23 +1,37 @@
-# 4Ward: API de Gestão de Consultas para Fisioterapeutas
+# 4Ward — API de Gestão de Consultas para Fisioterapeutas
 
-API criada para um aplicativo que conecta pacientes e fisioterapeutas. A pessoa cadastra um perfil com a possibilidade de ser fisioterapeuta/paciente. O fisioterapeuta cria o perfil profissional e os horários disponíveis. O paciente encontra um profissional, agenda uma consulta e pode cancelar ou remarcar. Depois do atendimento, o fisioterapeuta registra se a consulta foi realizada ou se o paciente faltou.
+API desenvolvida para uma aplicação que conecta **pacientes e fisioterapeutas**.
 
-Projeto desenvolvido por **Alberto Neto, Gabriel Trentini e Wesley Triches**.
+O sistema permite que fisioterapeutas cadastrem seus dados profissionais e horários disponíveis, enquanto pacientes podem encontrar profissionais, consultar horários e realizar agendamentos.
 
-## Tecnologias utilizadas
+Também é possível cancelar, remarcar e acompanhar o status das consultas.
+
+## Equipe
+
+Projeto desenvolvido por:
+
+- Alberto Neto
+- Gabriel Trentini
+- Wesley Triches
+
+---
+
+## Tecnologias
 
 - Node.js
 - TypeScript
 - NestJS
 - Prisma ORM
 - SQLite
-- JWT (JSON Web Token)
+- JWT
 - bcryptjs
 - class-validator
 - class-transformer
 - @nestjs/config
 
-## Como rodar o projeto
+---
+
+## Como executar
 
 ### 1. Clonar o repositório
 
@@ -34,18 +48,14 @@ npm install
 
 ### 3. Criar o arquivo `.env`
 
-O arquivo `.env` guarda as configurações sensíveis do projeto e não é enviado para o GitHub. Por isso, cada pessoa que clonar o repositório precisa criar o seu.
-
-Crie um arquivo chamado `.env` na raiz do projeto com este conteúdo:
+Na raiz do projeto:
 
 ```env
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="troque-por-uma-frase-secreta-grande"
 ```
 
-A frase pode ser qualquer uma, mas deve ser alterada. Caso `JWT_SECRET` não seja definido, a API utiliza um valor padrão de desenvolvimento.
-
-### 4. Criar o banco de dados
+### 4. Preparar o banco de dados
 
 ```bash
 npx prisma migrate dev
@@ -58,164 +68,219 @@ npx prisma generate
 npm run start:dev
 ```
 
-A API sobe em:
+A API ficará disponível em:
 
 ```text
 http://localhost:3000/api
 ```
 
-Durante o desenvolvimento, a aplicação reinicia automaticamente quando um arquivo é salvo.
+---
 
 ## Autenticação
 
-A API utiliza autenticação por **JWT**.
+A API utiliza autenticação por **JWT (JSON Web Token)**.
 
 As seguintes rotas são públicas:
 
-- `POST /auth/register`
-- `POST /auth/login`
-- `POST /auth/reactivate`
+```text
+POST /auth/register
+POST /auth/login
+POST /auth/reactivate
+```
 
-Todas as demais rotas exigem um token válido.
-
-Após o login ou cadastro, a resposta contém um `access_token`.
-
-O token deve ser enviado no cabeçalho das requisições protegidas:
+As demais rotas exigem:
 
 ```http
 Authorization: Bearer <access_token>
 ```
 
-O token possui validade de **1 dia**. Depois desse período, a API responde com `401` e é necessário fazer login novamente.
+Após o cadastro ou login, a API retorna um `access_token`.
 
-O JWT contém informações do usuário autenticado, como:
+O JWT contém informações como:
 
 - ID do usuário (`sub`);
 - nome;
 - email;
-- papel (`PATIENT` ou `PHYSIOTHERAPIST`).
+- papel do usuário.
 
-Essas informações são utilizadas pelo backend para identificar quem está realizando a requisição.
-
-## Ativação e desativação de conta
-
-Todo usuário é criado com:
+Papéis disponíveis:
 
 ```text
-active = true
+PATIENT
+PHYSIOTHERAPIST
 ```
 
-O próprio usuário pode desativar sua conta utilizando:
+O token possui validade de **1 dia**.
 
-```http
-PUT /users/me/deactivate
-```
+---
 
-A conta não é removida do banco. O campo `active` passa para `false`, preservando os dados e o histórico do usuário.
-
-Quando uma conta está desativada:
-
-- o usuário não consegue realizar login;
-- tokens emitidos anteriormente deixam de permitir acesso às rotas protegidas;
-- não é possível cadastrar uma nova conta utilizando o mesmo email.
-
-Para voltar a utilizar o sistema, o usuário deve utilizar:
-
-```http
-POST /auth/reactivate
-```
-
-informando o email e a senha corretos.
-
-Após a reativação, o campo `active` volta para `true` e um novo token é gerado.
-
-## Fluxo básico
-
-### Fisioterapeuta
-
-1. Registra-se como `PHYSIOTHERAPIST`;
-2. Recebe um token;
-3. Cria seu `Profile`;
-4. Cria seu perfil profissional em `Physiotherapist`;
-5. Cadastra os horários disponíveis;
-6. Visualiza sua agenda;
-7. Pode cancelar ou remarcar consultas antes do horário;
-8. Depois do atendimento, marca a consulta como realizada (`COMPLETED`) ou falta (`NO_SHOW`).
+## Cadastro de usuários
 
 ### Paciente
 
-1. Registra-se como `PATIENT`;
-2. Recebe um token;
-3. Cria seu `Profile`;
-4. Procura um fisioterapeuta;
-5. Visualiza os horários disponíveis;
-6. Escolhe um horário e agenda uma consulta;
-7. Visualiza suas consultas;
-8. Pode cancelar ou remarcar com pelo menos 24 horas de antecedência.
-
-## Rotas
-
-Todas as rotas começam com:
-
-```text
-/api
-```
-
-Por exemplo:
-
-```text
-http://localhost:3000/api/auth/login
-```
-
-As rotas protegidas exigem:
-
-```http
-Authorization: Bearer <access_token>
-```
-
-### Autenticação
-
-#### Registrar usuário
+O paciente se registra utilizando:
 
 ```http
 POST /auth/register
 ```
 
-Cria um usuário e devolve um token.
+Exemplo:
 
-O usuário pode ser cadastrado como:
-
-```text
-PATIENT
+```json
+{
+  "name": "Maria",
+  "email": "maria@email.com",
+  "password": "123456",
+  "role": "PATIENT"
+}
 ```
 
-ou:
+O cadastro cria:
 
 ```text
-PHYSIOTHERAPIST
+User
+ └── Profile
 ```
 
-Caso o papel não seja informado, o padrão é `PATIENT`.
+Depois disso, o paciente pode procurar fisioterapeutas e realizar agendamentos.
 
-#### Login
+### Fisioterapeuta
+
+O fisioterapeuta também utiliza:
 
 ```http
-POST /auth/login
+POST /auth/register
 ```
 
-Valida email e senha e devolve um token.
+Exemplo:
 
-Contas com `active = false` não podem realizar login.
+```json
+{
+  "name": "Paulo",
+  "email": "paulo@fisio.com",
+  "password": "123456",
+  "role": "PHYSIOTHERAPIST"
+}
+```
 
-#### Reativar conta
+O cadastro cria:
+
+```text
+User
+ └── Profile
+```
+
+Depois, o fisioterapeuta cadastra seus dados profissionais através de:
+
+```http
+POST /physiotherapists
+```
+
+Assim, a estrutura fica:
+
+```text
+User
+ └── Profile
+      └── Physiotherapist
+```
+
+---
+
+## Fluxo da aplicação
+
+### Paciente
+
+1. Realiza o cadastro;
+2. recebe um token JWT;
+3. procura fisioterapeutas;
+4. consulta horários disponíveis;
+5. agenda uma consulta;
+6. visualiza suas consultas;
+7. pode cancelar ou remarcar quando permitido.
+
+### Fisioterapeuta
+
+1. Realiza o cadastro como `PHYSIOTHERAPIST`;
+2. recebe um token JWT;
+3. cadastra seus dados profissionais;
+4. cadastra horários disponíveis;
+5. visualiza sua agenda;
+6. acompanha suas consultas;
+7. pode cancelar consultas;
+8. após o atendimento, registra a consulta como realizada ou falta.
+
+---
+
+# Rotas
+
+Todas as rotas possuem o prefixo:
+
+```text
+/api
+```
+
+Exemplo:
+
+```text
+http://localhost:3000/api/auth/login
+```
+
+## Autenticação
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/auth/register` | Cadastra um usuário |
+| POST | `/auth/login` | Realiza login |
+| POST | `/auth/reactivate` | Reativa uma conta |
+
+---
+
+## Usuários
+
+| Método | Rota | Descrição |
+|---|---|---|
+| PUT | `/users/me` | Atualiza nome e email |
+| PUT | `/users/me/deactivate` | Desativa a conta |
+
+O usuário autenticado é identificado pelo JWT através de:
+
+```ts
+req.user.sub
+```
+
+Por isso, não é necessário enviar o ID do usuário nas rotas relacionadas à própria conta.
+
+### Desativação
+
+A conta não é excluída do banco.
+
+O campo:
+
+```text
+active
+```
+
+passa de:
+
+```text
+true
+```
+
+para:
+
+```text
+false
+```
+
+Usuários desativados não conseguem acessar as rotas protegidas nem realizar login.
+
+Para reativar:
 
 ```http
 POST /auth/reactivate
 ```
 
-Reativa uma conta desativada.
-
-É necessário informar:
+Exemplo:
 
 ```json
 {
@@ -224,189 +289,91 @@ Reativa uma conta desativada.
 }
 ```
 
-O backend valida a senha antes de reativar a conta.
+---
+
+## Perfis
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/profiles/me` | Retorna o perfil do usuário |
+| PUT | `/profiles/me` | Atualiza o perfil |
+
+O `Profile` é criado automaticamente durante o cadastro do usuário.
+
+Ele pode armazenar informações como:
+
+- nome completo;
+- telefone;
+- data de nascimento;
+- avatar.
 
 ---
 
-### Usuários
+## Especialidades
 
-#### Atualizar minha conta
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/specialties` | Cria uma especialidade |
+| GET | `/specialties` | Lista especialidades |
+| GET | `/specialties/:id` | Busca uma especialidade |
+| PUT | `/specialties/:id` | Atualiza uma especialidade |
 
-```http
-PUT /users/me
+Criação e atualização são permitidas somente para fisioterapeutas.
+
+Não existe exclusão de especialidades para evitar problemas com registros já vinculados.
+
+---
+
+## Fisioterapeutas
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/physiotherapists` | Cria o perfil profissional |
+| GET | `/physiotherapists` | Lista fisioterapeutas |
+| GET | `/physiotherapists/:id` | Busca um fisioterapeuta |
+
+Para criar um perfil profissional, o usuário precisa possuir o papel:
+
+```text
+PHYSIOTHERAPIST
 ```
-
-Atualiza o nome e o email do usuário autenticado.
-
-O usuário é identificado através do JWT utilizando `req.user.sub`, portanto não é possível escolher o ID de outro usuário pela URL.
 
 Exemplo:
 
 ```json
 {
-  "name": "Novo nome",
-  "email": "novo@email.com"
+  "specialtyId": 1,
+  "crefito": "123456-F",
+  "bio": "Atendimento voltado à reabilitação esportiva",
+  "sessionPrice": 150,
+  "city": "Marau",
+  "serviceMode": "IN_PERSON",
+  "experienceYears": 5
 }
 ```
 
-#### Desativar minha conta
+O usuário não precisa informar `userId` nem `profileId`.
 
-```http
-PUT /users/me/deactivate
-```
+O backend identifica o usuário através do JWT e encontra seu `Profile`.
 
-Altera:
+### Filtros
 
-```text
-active = true
-```
-
-para:
-
-```text
-active = false
-```
-
-Os dados do usuário permanecem armazenados.
-
----
-
-### Perfis
-
-#### Criar perfil
-
-```http
-POST /profiles
-```
-
-Cria o perfil pessoal do usuário autenticado.
-
-#### Meu perfil
-
-```http
-GET /profiles/me
-```
-
-Retorna o perfil do usuário autenticado.
-
-#### Atualizar perfil
-
-```http
-PUT /profiles/me
-```
-
-Atualiza as informações do perfil do usuário autenticado.
-
----
-
-### Especialidades
-
-#### Criar especialidade
-
-```http
-POST /specialties
-```
-
-Cria uma especialidade.
-
-Essa operação é permitida apenas para usuários com papel:
-
-```text
-PHYSIOTHERAPIST
-```
-
-Pacientes recebem `403 Forbidden`.
-
-#### Listar especialidades
-
-```http
-GET /specialties
-```
-
-Lista todas as especialidades cadastradas.
-
-#### Buscar especialidade
-
-```http
-GET /specialties/:id
-```
-
-Busca uma especialidade pelo ID.
-
-#### Atualizar especialidade
-
-```http
-PUT /specialties/:id
-```
-
-Atualiza uma especialidade existente.
-
-Essa operação é permitida apenas para fisioterapeutas.
-
-Não existe rota para exclusão de especialidades, evitando a remoção de especialidades que possam estar vinculadas a fisioterapeutas.
-
----
-
-### Fisioterapeutas
-
-#### Criar perfil profissional
-
-```http
-POST /physiotherapists
-```
-
-Cria o perfil profissional do usuário autenticado.
-
-O usuário precisa ter sido cadastrado como:
-
-```text
-PHYSIOTHERAPIST
-```
-
-O perfil profissional possui informações como:
-
-- especialidade;
-- CREFITO;
-- biografia;
-- preço da sessão;
-- cidade;
-- modalidade de atendimento;
-- anos de experiência.
-
-#### Listar fisioterapeutas
-
-```http
-GET /physiotherapists
-```
-
-Lista os fisioterapeutas cadastrados.
-
-A rota aceita filtros opcionais.
-
-##### Cidade
+Por cidade:
 
 ```http
 GET /physiotherapists?city=Marau
 ```
 
-##### Especialidade
+Por especialidade:
 
 ```http
 GET /physiotherapists?specialtyId=1
 ```
 
-##### Modalidade
+Por modalidade:
 
 ```http
 GET /physiotherapists?serviceMode=IN_PERSON
-```
-
-Os valores aceitos para `serviceMode` são:
-
-```text
-IN_PERSON
-ONLINE
-BOTH
 ```
 
 Os filtros podem ser combinados:
@@ -415,29 +382,25 @@ Os filtros podem ser combinados:
 GET /physiotherapists?city=Marau&specialtyId=1&serviceMode=IN_PERSON
 ```
 
-#### Buscar fisioterapeuta
+Modalidades disponíveis:
 
-```http
-GET /physiotherapists/:id
+```text
+IN_PERSON
+ONLINE
+BOTH
 ```
-
-Retorna os dados de um fisioterapeuta específico.
 
 ---
 
-### Horários
+## Horários
 
-Os horários representam os períodos disponibilizados pelos fisioterapeutas para atendimento.
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/schedules` | Cria um horário |
+| GET | `/schedules` | Lista horários disponíveis |
+| GET | `/schedules/me` | Retorna a agenda do fisioterapeuta |
 
-#### Criar horário
-
-```http
-POST /schedules
-```
-
-Cadastra um horário para o fisioterapeuta autenticado.
-
-Exemplo:
+Criar horário:
 
 ```json
 {
@@ -445,84 +408,67 @@ Exemplo:
 }
 ```
 
-Não é possível cadastrar horários no passado.
-
-Um fisioterapeuta não pode possuir dois horários na mesma data e hora.
-
-Essa regra também é garantida no banco através da chave única composta:
-
-```text
-(physiotherapistId, dateTime)
-```
-
-Fisioterapeutas diferentes podem disponibilizar o mesmo horário.
-
-#### Horários livres de um fisioterapeuta
+Consultar horários de um fisioterapeuta:
 
 ```http
 GET /schedules?physiotherapistId=1
 ```
 
-Lista os horários disponíveis de um fisioterapeuta.
-
-#### Horários livres por data
+Filtrar por data:
 
 ```http
 GET /schedules?physiotherapistId=1&date=2026-10-25
 ```
 
-Lista os horários disponíveis do fisioterapeuta na data informada.
-
-#### Minha agenda
+Consultar a própria agenda:
 
 ```http
 GET /schedules/me
 ```
 
-Retorna a agenda do fisioterapeuta autenticado.
-
-#### Minha agenda por data
+Ou por data:
 
 ```http
 GET /schedules/me?date=2026-10-25
 ```
 
-Retorna a agenda do fisioterapeuta autenticado apenas para a data informada.
+### Regras
 
-A agenda permite consultar dias anteriores, atuais e futuros.
+- Não é possível cadastrar horários no passado;
+- um fisioterapeuta não pode possuir dois horários na mesma data e hora;
+- fisioterapeutas diferentes podem disponibilizar o mesmo horário.
 
 ---
 
-### Consultas
+## Consultas
 
-#### Agendar consulta
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/appointments` | Agenda uma consulta |
+| GET | `/appointments/me` | Lista minhas consultas |
+| GET | `/appointments/:id` | Busca uma consulta |
+| PATCH | `/appointments/:id/cancel` | Cancela uma consulta |
+| POST | `/appointments/:id/reschedule` | Remarca uma consulta |
+| PATCH | `/appointments/:id/complete` | Marca como realizada |
+| PATCH | `/appointments/:id/no-show` | Registra falta |
+
+### Agendar
+
+Apenas pacientes podem criar consultas.
 
 ```http
 POST /appointments
 ```
 
-Agenda uma consulta utilizando um horário disponível.
+O agendamento utiliza um horário disponível.
 
-Apenas pacientes podem utilizar essa operação.
-
-#### Minhas consultas
-
-```http
-GET /appointments/me
-```
-
-Lista as consultas relacionadas ao usuário autenticado.
-
-- O paciente visualiza suas consultas;
-- O fisioterapeuta visualiza as consultas dos seus pacientes.
-
-#### Filtrar consultas por status
+### Filtrar por status
 
 ```http
 GET /appointments/me?status=SCHEDULED
 ```
 
-Os status disponíveis são:
+Status disponíveis:
 
 ```text
 SCHEDULED
@@ -531,29 +477,13 @@ CANCELLED
 NO_SHOW
 ```
 
-#### Buscar consulta
-
-```http
-GET /appointments/:id
-```
-
-Retorna uma consulta específica.
-
-Apenas o paciente e o fisioterapeuta envolvidos na consulta podem acessá-la.
-
-Caso outro usuário tente acessar, a API retorna:
-
-```text
-403 Forbidden
-```
-
-#### Cancelar consulta
+### Cancelar
 
 ```http
 PATCH /appointments/:id/cancel
 ```
 
-Exige o campo:
+Exemplo:
 
 ```json
 {
@@ -561,15 +491,13 @@ Exige o campo:
 }
 ```
 
-Pode ser utilizada pelo paciente ou pelo fisioterapeuta da consulta.
-
-#### Remarcar consulta
+### Remarcar
 
 ```http
 POST /appointments/:id/reschedule
 ```
 
-Exige um novo horário:
+Exemplo:
 
 ```json
 {
@@ -577,15 +505,11 @@ Exige um novo horário:
 }
 ```
 
-A nova consulta precisa utilizar um horário do mesmo fisioterapeuta.
-
-#### Marcar como realizada
+### Finalizar consulta
 
 ```http
 PATCH /appointments/:id/complete
 ```
-
-Utilizada pelo fisioterapeuta depois do horário da consulta.
 
 Pode receber:
 
@@ -595,122 +519,37 @@ Pode receber:
 }
 ```
 
-#### Marcar falta
+### Registrar falta
 
 ```http
 PATCH /appointments/:id/no-show
 ```
 
-Marca que o paciente não compareceu.
+Somente o fisioterapeuta da consulta pode utilizar essa operação.
 
-Apenas o fisioterapeuta pode realizar essa operação e somente depois do horário da consulta.
+---
 
-## Regras de negócio das consultas
+## Principais regras de negócio
 
-### Estados
+- Apenas pacientes podem agendar consultas;
+- não é possível agendar horários que já passaram;
+- um horário pode possuir apenas uma consulta ativa por vez;
+- ao criar uma consulta, o horário fica indisponível;
+- ao cancelar ou remarcar, o horário anterior volta a ficar disponível;
+- o agendamento utiliza transação para impedir que dois pacientes ocupem o mesmo horário;
+- um paciente não pode possuir duas consultas agendadas na mesma data e hora;
+- o preço da consulta é registrado no momento do agendamento;
+- alterações futuras no preço do fisioterapeuta não modificam consultas já agendadas;
+- cada usuário só pode acessar consultas das quais participa;
+- pacientes só podem cancelar ou remarcar com pelo menos 24 horas de antecedência;
+- fisioterapeutas podem cancelar antes do horário sem a regra das 24 horas;
+- consultas passadas não podem ser canceladas ou remarcadas;
+- após o horário, o fisioterapeuta pode marcar a consulta como `COMPLETED` ou `NO_SHOW`;
+- consultas em estado final não podem mais ser alteradas;
+- ao remarcar, a consulta anterior permanece no histórico como `CANCELLED`;
+- o novo horário de uma remarcação deve pertencer ao mesmo fisioterapeuta.
 
-Uma consulta começa como:
-
-```text
-SCHEDULED
-```
-
-e pode ir para um dos três estados finais:
-
-- `SCHEDULED`: consulta agendada;
-- `CANCELLED`: consulta cancelada;
-- `COMPLETED`: consulta realizada;
-- `NO_SHOW`: paciente não compareceu.
-
-Consultas que já chegaram a um estado final não podem mais ser alteradas.
-
-### Regras
-
-- Só pacientes podem agendar consultas.
-- Não é possível agendar um horário que já passou.
-- Um horário pode possuir no máximo uma consulta ativa por vez.
-- Quando uma consulta é criada, o horário passa a ficar indisponível.
-- Quando uma consulta é cancelada ou remarcada, o horário anterior volta a ficar disponível.
-- A verificação e a ocupação do horário são realizadas dentro de uma transação.
-- Isso impede que dois pacientes ocupem o mesmo horário simultaneamente.
-- Um paciente não pode possuir duas consultas `SCHEDULED` na mesma data e hora, mesmo com fisioterapeutas diferentes.
-- O preço da consulta é registrado no momento do agendamento.
-- Caso o fisioterapeuta altere o preço da sessão posteriormente, consultas já agendadas mantêm o preço anterior.
-- Cada usuário só pode acessar consultas das quais participa.
-- O paciente só pode cancelar ou remarcar com pelo menos 24 horas de antecedência.
-- O fisioterapeuta pode cancelar uma consulta antes do horário sem a regra das 24 horas.
-- Consultas cujo horário já passou não podem ser canceladas ou remarcadas.
-- Depois do horário, o fisioterapeuta deve marcar a consulta como `COMPLETED` ou `NO_SHOW`.
-- Apenas o fisioterapeuta da consulta pode marcar `COMPLETED` ou `NO_SHOW`.
-- Ao remarcar, a consulta anterior é mantida no histórico como `CANCELLED`.
-- A nova consulta fica ligada à consulta anterior através do campo `rescheduledFromId`.
-- O novo horário de uma remarcação precisa pertencer ao mesmo fisioterapeuta.
-
-### Por que um horário pode ter várias consultas no banco?
-
-Antes, o modelo tinha:
-
-```text
-appointment Appointment?
-```
-
-no `Schedule`, e o campo:
-
-```text
-scheduleId
-```
-
-do `Appointment` era único.
-
-Isso fazia com que um horário pudesse aparecer em apenas uma consulta durante toda a existência do sistema.
-
-Por exemplo:
-
-```text
-17:00
-↓
-Maria agenda
-↓
-Maria cancela
-```
-
-Mesmo que o horário voltasse para:
-
-```text
-available = true
-```
-
-outro paciente não poderia utilizar esse mesmo `Schedule`, pois o `scheduleId` continuava relacionado à consulta cancelada.
-
-Agora a relação entre `Schedule` e `Appointment` é:
-
-```text
-1:N
-```
-
-Um horário pode aparecer em várias consultas armazenadas no histórico.
-
-Exemplo:
-
-```text
-Schedule 10 - 17:00
-        ↓
-Appointment 1 - CANCELLED
-        ↓
-horário volta a ficar disponível
-        ↓
-Appointment 2 - SCHEDULED
-```
-
-Dessa forma, a consulta cancelada continua registrada com seu histórico e motivo de cancelamento, enquanto o horário pode ser utilizado novamente.
-
-Na regra de negócio, porém, o horário continua tendo no máximo **uma consulta ativa por vez**, controlado pelo campo:
-
-```text
-available
-```
-
-e pelas transações utilizadas durante o agendamento.
+---
 
 ## Principais entidades
 
@@ -718,48 +557,51 @@ e pelas transações utilizadas durante o agendamento.
 
 Representa a conta utilizada para autenticação.
 
-Possui informações como:
+Principais informações:
 
 - nome;
 - email;
 - senha armazenada como hash;
-- papel (`PATIENT` ou `PHYSIOTHERAPIST`);
-- situação da conta (`active`).
+- papel;
+- situação da conta.
 
 ### Profile
 
-Armazena os dados pessoais do usuário:
+Armazena os dados pessoais do usuário.
 
-- nome completo;
-- telefone;
-- data de nascimento;
-- avatar.
-
-Cada usuário pode possuir no máximo um perfil.
+```text
+User 1 — 1 Profile
+```
 
 ### Physiotherapist
 
-Armazena os dados profissionais de um fisioterapeuta:
+Armazena informações profissionais:
 
 - CREFITO;
 - especialidade;
 - biografia;
-- preço da sessão;
+- preço;
 - cidade;
 - modalidade;
 - experiência.
 
+Um fisioterapeuta está relacionado a um `Profile`.
+
 ### Specialty
 
-Representa as especialidades disponíveis para os fisioterapeutas.
+Representa uma especialidade profissional.
 
 ### Schedule
 
-Representa um horário criado por um fisioterapeuta.
+Representa um horário disponibilizado por um fisioterapeuta.
 
 ### Appointment
 
-Representa uma consulta entre um paciente e um fisioterapeuta.
+Representa uma consulta entre paciente e fisioterapeuta.
+
+Um `Schedule` pode possuir várias consultas armazenadas no histórico, mas somente uma consulta pode estar ativa por vez.
+
+---
 
 ## Enums
 
@@ -794,6 +636,26 @@ PATIENT
 PHYSIOTHERAPIST
 ```
 
-## Diagrama ER do projeto
+---
+
+## Modelo simplificado
+
+```text
+User
+ │
+ └── Profile
+      │
+      ├── Physiotherapist
+      │     │
+      │     ├── Specialty
+      │     ├── Schedule
+      │     └── Appointment
+      │
+      └── Appointment
+```
+
+---
+
+## Diagrama ER
 
 ![Diagrama ER do projeto](docs/diagrama-er.png)
