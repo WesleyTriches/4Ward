@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXN1YXJpb0B1cGYuYnIiLCJuYW1lIjoidXN1YXJpbyIsInJvbGUiOiJQQVRJRU5UIiwiaWF0IjoxNzkxMjM3MDcwLCJleHAiOjE3OTEzMjM0NzB9.rql9MNUTfNqRi3hfIEqef61ebjHfeo9BIDEErSZxAIs
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoicGF1bG9AZmlzaW8uY29tIiwibmFtZSI6IlBhdWxvIiwicm9sZSI6IlBIWVNJT1RIRVJBUElTVCIsImlhdCI6MTc5MTYwMDIwMCwiZXhwIjoxNzkxNjg2NjAwfQ.uo9M3CZAkKmyOx2Haft4BD-qeV9LDR25pMs1Lw3aS-M
 
 ### Login usuário existente
 POST {{baseUrl}}/auth/login
@@ -10,7 +10,7 @@ Content-Type: application/json
   "password": "abc123"
 }
 
-### Registrar fisioterapeuta
+### Registrar fisioterapeuta (João)
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -21,7 +21,7 @@ Content-Type: application/json
   "role": "PHYSIOTHERAPIST"
 }
 
-### Login fisioterapeuta
+### Login fisioterapeuta (João)
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -30,7 +30,7 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Registrar paciente
+### Registrar paciente (Maria)
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -41,7 +41,7 @@ Content-Type: application/json
   "role": "PATIENT"
 }
 
-### Login paciente
+### Login paciente (Maria)
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -66,6 +66,26 @@ Content-Type: application/json
 
 {
   "email": "teste@teste.com",
+  "password": "123456"
+}
+
+### Registrar fisioterapeuta (Paulo)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Paulo",
+  "email": "paulo@fisio.com",
+  "password": "123456",
+  "role": "PHYSIOTHERAPIST"
+}
+
+### Login fisioterapeuta (Paulo)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "paulo@fisio.com",
   "password": "123456"
 }
 
