@@ -330,6 +330,8 @@ Não existe exclusão de especialidades para evitar problemas com registros já 
 |---|---|---|
 | POST | `/physiotherapists` | Cria o perfil profissional |
 | GET | `/physiotherapists` | Lista fisioterapeutas |
+| GET | `/physiotherapists/me` | Retorna o perfil profissional do usuário |
+| PUT | `/physiotherapists/me` | Atualiza o perfil profissional |
 | GET | `/physiotherapists/:id` | Busca um fisioterapeuta |
 
 Para criar um perfil profissional, o usuário precisa possuir o papel:
@@ -355,6 +357,35 @@ Exemplo:
 O usuário não precisa informar `userId` nem `profileId`.
 
 O backend identifica o usuário através do JWT e encontra seu `Profile`.
+
+### Meu perfil profissional
+
+```http
+GET /physiotherapists/me
+```
+
+Retorna o perfil profissional do usuário logado, com `specialty` e `profile`.
+
+Se o fisioterapeuta ainda não completou o cadastro profissional, a rota retorna `404`.
+
+Para atualizar, basta enviar apenas os campos que serão alterados:
+
+```http
+PUT /physiotherapists/me
+```
+
+```json
+{
+  "bio": "Atendimento voltado à reabilitação esportiva e ergonomia",
+  "sessionPrice": 180,
+  "serviceMode": "BOTH"
+}
+```
+
+As mesmas regras da criação são aplicadas:
+
+- a especialidade informada precisa existir (`404`);
+- o CREFITO não pode pertencer a outro fisioterapeuta (`409`).
 
 ### Filtros
 
