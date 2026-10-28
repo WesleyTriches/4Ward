@@ -1,49 +1,110 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjgsImVtYWlsIjoicGF1bG9AZmlzaW8uY29tIiwibmFtZSI6IlBhdWxvIiwicm9sZSI6IlBIWVNJT1RIRVJBUElTVCIsImlhdCI6MTc5MTY3OTUxMywiZXhwIjoxNzkxNzY1OTEzfQ.gf_3I-oajVaga4EkjBcRgEFZ3WsUbgpNW2XcdD976ak
-### Todos
-GET {{baseUrl}}/physiotherapists
-Authorization: Bearer {{token}}
 
-###
-POST {{baseUrl}}/physiotherapists
-Authorization: Bearer {{token}}
+### 1. Cadastrar um fisio NOVO (troque o email a cada teste)
+# @name registroFisio
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "specialtyId": 3,
-  "crefito": "321456-F",
-  "bio": "Atendimento voltado a ergonomia",
-  "sessionPrice": 150,
-  "city": "Marau",
-  "serviceMode": "IN_PERSON",
-  "experienceYears": 5
+  "name": "Fisio Teste Me",
+  "email": "fisio.me2@teste.com",
+  "password": "123456",
+  "role": "PHYSIOTHERAPIST"
 }
 
-### Cidade
-GET {{baseUrl}}/physiotherapists?city=Marau
-Authorization: Bearer {{token}}
+### 2. GET /me ANTES de criar o perfil profissional
+# ESPERADO: 404 "Perfil profissional não encontrado."
+GET {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
 
-### Especialidade
-GET {{baseUrl}}/physiotherapists?specialtyId=1
-Authorization: Bearer {{token}}
+### 3. Criar o perfil profissional
+# ESPERADO: 201
+POST {{baseUrl}}/physiotherapists
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+Content-Type: application/json
 
-### Presencial
-GET {{baseUrl}}/physiotherapists?serviceMode=IN_PERSON
-Authorization: Bearer {{token}}
+{
+  "specialtyId": 1,
+  "crefito": "999001-F",
+  "bio": "Teste da rota me",
+  "sessionPrice": 120,
+  "city": "Passo Fundo",
+  "serviceMode": "BOTH",
+  "experienceYears": 3
+}
 
-### Online
-GET {{baseUrl}}/physiotherapists?serviceMode=ONLINE
-Authorization: Bearer {{token}}
+### 4. GET /me DEPOIS de criar
+# ESPERADO: 200, com specialty e profile juntos
+GET {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
 
-### Todos os filtros
-GET {{baseUrl}}/physiotherapists?city=Marau&specialtyId=1&serviceMode=IN_PERSON
-Authorization: Bearer {{token}}
+### 5. PUT /me alterando só o preço e a cidade
+# ESPERADO: 200, com sessionPrice 180 e city Marau. O resto não muda.
+PUT {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+Content-Type: application/json
 
-### Deve dar 400
-GET {{baseUrl}}/physiotherapists?specialtyId=abc
-Authorization: Bearer {{token}}
+{
+  "sessionPrice": 180,
+  "city": "Marau"
+}
 
-### Deve dar 400
-GET {{baseUrl}}/physiotherapists?serviceMode=TESTE
-Authorization: Bearer {{token}}
+### 6. PUT /me com o CREFITO de OUTRO fisio
+# ESPERADO: 409 "CREFITO já cadastrado."
+PUT {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+Content-Type: application/json
 
+{
+  "crefito": "123456-F"
+}
+
+### 7. PUT /me com o PRÓPRIO CREFITO
+# ESPERADO: 200 (não pode dar conflito com ele mesmo)
+PUT {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "crefito": "999001-F"
+}
+
+### 8. PUT /me com especialidade que não existe
+# ESPERADO: 404 "Especialidade não encontrada."
+PUT {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "specialtyId": 99999
+}
+
+### 9. PUT /me com dado inválido
+# ESPERADO: 400 (sessionPrice must not be less than 0)
+PUT {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+Content-Type: application/json
+
+{
+  "sessionPrice": -10
+}
+
+### 10. A rota antiga por id continua funcionando
+# ESPERADO: 200 (se der 400 aqui, a ordem das rotas no controller está errada)
+GET {{baseUrl}}/physiotherapists/1
+Authorization: Bearer {{registroFisio.response.body.$.access_token}}
+
+### 11. Paciente chamando /me
+# ESPERADO: 404 (paciente não tem perfil profissional)
+# @name loginPaciente
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "maria@teste.com",
+  "password": "123456"
+}
+
+###
+GET {{baseUrl}}/physiotherapists/me
+Authorization: Bearer {{loginPaciente.response.body.$.access_token}}

@@ -7,6 +7,7 @@ import {
 
 import { PrismaService } from 'src/database/prisma.service';
 import { CreatePhysiotherapistDto } from 'src/dtos/create-physiotherapist-dto';
+import { UpdatePhysiotherapistDto } from 'src/dtos/update-physiotherapist-dto';
 
 import {
   ServiceMode,
@@ -128,6 +129,92 @@ export class PhysiotherapistsService {
                     ServiceMode.BOTH,
                   ],
                 },
+      },
+
+      include: {
+        specialty: true,
+        profile: true,
+      },
+    });
+  }
+
+  async findMe(userId: number) {
+    const physiotherapist =
+      await this.prisma.physiotherapist.findFirst({
+        where: {
+          profile: {
+            userId,
+          },
+        },
+
+        include: {
+          specialty: true,
+          profile: true,
+        },
+      });
+
+    if (!physiotherapist) {
+      throw new NotFoundException(
+        'Perfil profissional não encontrado.',
+      );
+    }
+
+    return physiotherapist;
+  }
+
+  async updateMe(
+    userId: number,
+    dto: UpdatePhysiotherapistDto,
+  ) {
+    const physiotherapist =
+      await this.findMe(userId);
+
+    if (dto.specialtyId !== undefined) {
+      const specialty =
+        await this.prisma.specialty.findUnique({
+          where: {
+            id: dto.specialtyId,
+          },
+        });
+
+      if (!specialty) {
+        throw new NotFoundException(
+          'Especialidade não encontrada.',
+        );
+      }
+    }
+
+    if (dto.crefito !== undefined) {
+      const crefitoExists =
+        await this.prisma.physiotherapist.findUnique({
+          where: {
+            crefito: dto.crefito,
+          },
+        });
+
+      if (
+        crefitoExists &&
+        crefitoExists.id !== physiotherapist.id
+      ) {
+        throw new ConflictException(
+          'CREFITO já cadastrado.',
+        );
+      }
+    }
+
+    return this.prisma.physiotherapist.update({
+      where: {
+        id: physiotherapist.id,
+      },
+
+      data: {
+        specialtyId: dto.specialtyId,
+        crefito: dto.crefito,
+        bio: dto.bio,
+        sessionPrice: dto.sessionPrice,
+        city: dto.city,
+        serviceMode: dto.serviceMode,
+        experienceYears: dto.experienceYears,
       },
 
       include: {

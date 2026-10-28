@@ -1,16 +1,15 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjgsImVtYWlsIjoicGF1bG9AZmlzaW8uY29tIiwibmFtZSI6IlBhdWxvIiwicm9sZSI6IlBIWVNJT1RIRVJBUElTVCIsImlhdCI6MTc5MTY3OTUxMywiZXhwIjoxNzkxNzY1OTEzfQ.gf_3I-oajVaga4EkjBcRgEFZ3WsUbgpNW2XcdD976ak
+@token = {{login.response.body.$.access_token}}
 
-### Criar especialidade - fisioterapeuta
-POST {{baseUrl}}/specialties
-Authorization: Bearer {{token}}
+### Login (envie este primeiro)
+# @name login
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "name": "Fisioterapia do Trabalho",
-  "description": "Previne lesões por esforços repetitivos (LER) e ajusta a postura de trabalhadores através da ginástica laboral"
+  "email": "maria@teste.com",
+  "password": "123456"
 }
-
 ### Listar especialidades
 GET {{baseUrl}}/specialties
 Authorization: Bearer {{token}}
